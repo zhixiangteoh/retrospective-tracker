@@ -15,8 +15,7 @@ export default () => {
   return (
     <Example>
       <Box display="flex" alignItems="center">
-        <Logo width="50px" height="50px" />
-        {greeting}
+        <Logo width="30px" height="30px" />
       </Box>
     </Example>
   );
