@@ -1,10 +1,9 @@
 import styled from "styled-components";
 
 const ListContainer = styled.div`
-  height: 300px;
+  height: 600px;
   box-sizing: border-box;
-  width: 350px;
-  background-color: #f0f0f0;
+  width: 500px;
   padding: 20px;
 `;
 

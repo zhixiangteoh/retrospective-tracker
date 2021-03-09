@@ -8,6 +8,8 @@ import Box from "components/Box";
 import Example from "components/Example";
 import List from "components/List";
 import ListContainer from "components/ListContainer";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "shards-ui/dist/css/shards.min.css";
 
 const Popup = () => {
   return (
@@ -24,5 +26,6 @@ const Popup = () => {
 
 const root = document.createElement("div");
 document.body.appendChild(root);
+document.body.style.margin = 0;
 
 ReactDOM.render(<Popup />, root);
