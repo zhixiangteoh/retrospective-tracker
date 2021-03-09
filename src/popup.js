@@ -8,6 +8,7 @@ import Box from "components/Box";
 import Example from "components/Example";
 import List from "components/List";
 import ListContainer from "components/ListContainer";
+import { ListProvider } from "context/List";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 
@@ -17,9 +18,11 @@ const Popup = () => {
       {/* <Box width="200px" padding={3}>
         <Example />
       </Box> */}
-      <ListContainer>
-        <List />
-      </ListContainer>
+      <ListProvider>
+        <ListContainer>
+          <List />
+        </ListContainer>
+      </ListProvider>
     </ThemeProvider>
   );
 };

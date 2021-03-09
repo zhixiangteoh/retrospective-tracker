@@ -1,15 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { withTheme } from "styled-components";
 import {
   InputGroup,
   InputGroupText,
   InputGroupAddon,
   FormTextarea,
+  FormInput,
   Button,
   Fade,
 } from "shards-react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import Box from "components/Box";
+import {
+  ListContext,
+  ADD_ITEM,
+  REMOVE_ITEM,
+  UPDATE_ITEM,
+  SET_GREEN_ITEMS,
+  SET_YELLOW_ITEMS,
+  SET_RED_ITEMS,
+} from "context/List";
 
 const getItemStyle = (isDragging, draggableStyle) => ({
   // some basic styles to make the items look a bit nicer
@@ -46,20 +57,9 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-const List = () => {
+const List = ({ theme }) => {
   const [value, setValue] = useState("");
-  const [greenItems, setGreenItems] = useState([
-    { id: "0", body: "0" },
-    { id: "1", body: "1" },
-  ]);
-  const [yellowItems, setYellowItems] = useState([
-    { id: "2", body: "2" },
-    { id: "3", body: "3" },
-  ]);
-  const [redItems, setRedItems] = useState([
-    { id: "4", body: "4" },
-    { id: "5", body: "5" },
-  ]);
+  const [list, dispatch] = useContext(ListContext);
 
   const move = (source, destination, droppableSource, droppableDestination) => {
     const sourceClone = Array.from(source);
@@ -72,15 +72,24 @@ const List = () => {
   };
 
   const getList = (id) => {
-    if (id === "G") return greenItems;
-    if (id === "Y") return yellowItems;
-    else return redItems;
+    if (id === "G") {
+      return list.greenItems;
+    }
+    if (id === "Y") {
+      return list.yellowItems;
+    } else {
+      return list.redItems;
+    }
   };
 
   const setList = (id, items) => {
-    if (id === "G") setGreenItems(items);
-    else if (id === "Y") setYellowItems(items);
-    else setRedItems(items);
+    if (id === "G") {
+      dispatch({ type: SET_GREEN_ITEMS, payload: items });
+    } else if (id === "Y") {
+      dispatch({ type: SET_YELLOW_ITEMS, payload: items });
+    } else {
+      dispatch({ type: SET_RED_ITEMS, payload: items });
+    }
   };
 
   const onDragEnd = (result) => {
@@ -99,43 +108,46 @@ const List = () => {
       );
       setList(source.droppableId, reorderedItems);
     } else {
-      const result = move(
+      const moveResult = move(
         getList(source.droppableId),
         getList(destination.droppableId),
         source,
         destination
       );
 
-      setList(source.droppableId, result[0]);
-      setList(destination.droppableId, result[1]);
+      setList(source.droppableId, moveResult[0]);
+      setList(destination.droppableId, moveResult[1]);
     }
   };
 
-  const handleInputChange = ({ target: { value } }) => setValue(value);
-
-  const onKeyPress = (event) => {
-    const {
-      target: { value },
-    } = event;
+  const handleInputChange = ({ target: { value } }) => {
     setValue(value);
   };
 
-  const addGreenItem = () => {
-    if (!value.trim()) return;
-    setGreenItems([
-      {
-        id: `${greenItems.length + yellowItems.length + redItems.length + 1}`,
-        body: value.trim(),
-      },
-      ...greenItems,
-    ]);
+  const onKeyPress = (event) => {
+    if (event.key.toLowerCase() === "enter") {
+      addItem(event.target.value);
+      setValue("");
+    }
+  };
+
+  const addItem = (item = value) => {
+    if (!item.trim()) return;
+    // setGreenItems([
+    //   {
+    //     id: `${greenItems.length + yellowItems.length + redItems.length + 1}`,
+    //     body: item.trim(),
+    //   },
+    //   ...greenItems,
+    // ]);
+    dispatch({ type: ADD_ITEM, payload: item.trim() });
     setValue("");
   };
 
   return (
     <Box display="flex" flexDirection="column" height="100%">
-      <InputGroup>
-        <FormTextarea
+      <InputGroup className="mb-2">
+        <FormInput
           placeholder="Add an item..."
           autoFocus
           onKeyPress={onKeyPress}
@@ -144,56 +156,74 @@ const List = () => {
           onChange={handleInputChange}
         />
         <InputGroupAddon type="append">
-          <Button theme="primary" onClick={addGreenItem}>
+          <Button theme="primary" onClick={addItem}>
             Add
           </Button>
         </InputGroupAddon>
       </InputGroup>
 
       <DragDropContext onDragEnd={onDragEnd}>
-        <div>GREEN</div>
-        <DroppableList id="G" items={greenItems} />
-
-        <div>YELLOW</div>
-        <DroppableList id="Y" items={yellowItems} />
-
-        <div>RED</div>
-        <DroppableList id="R" items={redItems} />
+        <div style={{ color: theme.palette.green }} className="text-center">
+          GREEN
+        </div>
+        {list.greenItems ? (
+          <DroppableList id="G" items={list.greenItems} />
+        ) : (
+          <p>Loading...</p>
+        )}
+        <div style={{ color: theme.palette.yellow }} className="text-center">
+          YELLOW
+        </div>
+        {list.greenItems ? (
+          <DroppableList id="Y" items={list.yellowItems} />
+        ) : (
+          <p>Loading...</p>
+        )}
+        <div style={{ color: theme.palette.red }} className="text-center">
+          RED
+        </div>
+        {list.greenItems ? (
+          <DroppableList id="R" items={list.redItems} />
+        ) : (
+          <p>Loading...</p>
+        )}
       </DragDropContext>
     </Box>
   );
 };
 
-const DroppableList = ({ id, items }) => (
-  <Droppable droppableId={id}>
-    {(provided, snapshot) => (
-      <div
-        {...provided.droppableProps}
-        ref={provided.innerRef}
-        style={getListStyle(snapshot.isDraggingOver, items.length)}
-      >
-        {items.map((item, index) => (
-          <Draggable key={item.id} draggableId={item.id} index={index}>
-            {(provided, snapshot) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.draggableProps}
-                {...provided.dragHandleProps}
-                style={getItemStyle(
-                  snapshot.isDragging,
-                  provided.draggableProps.style
-                )}
-              >
-                <div>{item.body}</div>
-                {provided.placeholder}
-              </div>
-            )}
-          </Draggable>
-        ))}
-        {provided.placeholder}
-      </div>
-    )}
-  </Droppable>
-);
+const DroppableList = ({ id, items }) => {
+  return (
+    <Droppable droppableId={id}>
+      {(provided, snapshot) => (
+        <div
+          {...provided.droppableProps}
+          ref={provided.innerRef}
+          style={getListStyle(snapshot.isDraggingOver, items.length)}
+        >
+          {items.map((item, index) => (
+            <Draggable key={item.id} draggableId={item.id} index={index}>
+              {(provided, snapshot) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.draggableProps}
+                  {...provided.dragHandleProps}
+                  style={getItemStyle(
+                    snapshot.isDragging,
+                    provided.draggableProps.style
+                  )}
+                >
+                  <div>{item.body}</div>
+                  {provided.placeholder}
+                </div>
+              )}
+            </Draggable>
+          ))}
+          {provided.placeholder}
+        </div>
+      )}
+    </Droppable>
+  );
+};
 
-export default List;
+export default withTheme(List);
