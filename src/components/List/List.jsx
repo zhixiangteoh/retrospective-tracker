@@ -133,13 +133,6 @@ const List = ({ theme }) => {
 
   const addItem = (item = value) => {
     if (!item.trim()) return;
-    // setGreenItems([
-    //   {
-    //     id: `${greenItems.length + yellowItems.length + redItems.length + 1}`,
-    //     body: item.trim(),
-    //   },
-    //   ...greenItems,
-    // ]);
     dispatch({ type: ADD_ITEM, payload: item.trim() });
     setValue("");
   };
