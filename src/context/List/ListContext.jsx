@@ -8,30 +8,32 @@ import reducer from "./reducer";
 // global list object
 const ListContext = React.createContext({});
 
-const ListProvider = ({ children }) => {
+const ListProvider = ({ storageKey, children }) => {
   const [state, dispatch] = useReducer(reducer, {});
   const initRef = useRef(false);
 
   // sync with browser storage
   useEffect(() => {
     if (initRef.current) {
-      browser.storage.sync.set({ list: state });
+      browser.storage.sync.set({ [storageKey]: state });
     }
   }, [state]);
 
   // listen to storage change and update context
   useEffect(() => {
     browser.storage.onChanged.addListener((changes) => {
-      if (changes.list) {
-        dispatch({ type: INIT, payload: changes.list.newValue });
+      if (changes[storageKey]) {
+        dispatch({ type: INIT, payload: changes[storageKey].newValue });
       }
     });
   }, []);
 
   // initialize with stub list
   useEffect(async () => {
-    const { list } = await browser.storage.sync.get({ list: getStubList() });
-    dispatch({ type: INIT, payload: list });
+    const storage = await browser.storage.sync.get({
+      [storageKey]: getStubList(),
+    });
+    dispatch({ type: INIT, payload: storage[storageKey] });
     initRef.current = true;
   }, []);
 

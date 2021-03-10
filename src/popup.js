@@ -8,6 +8,7 @@ import Box from "components/Box";
 import Example from "components/Example";
 import MainMenu from "components/MainMenu";
 import Current from "components/Current";
+import PreviousList from "components/PreviousList";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 
@@ -19,7 +20,7 @@ const Popup = () => {
       case "current":
         return <Current setMenu={setPage} />;
       case "previous":
-        return <Current />;
+        return <PreviousList setMenu={setPage} />;
       case "actions":
         return <Current />;
       default:

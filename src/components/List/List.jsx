@@ -57,7 +57,7 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-const List = ({ theme, setMenu }) => {
+const List = ({ theme }) => {
   const [value, setValue] = useState("");
   const [list, dispatch] = useContext(ListContext);
 
@@ -139,12 +139,6 @@ const List = ({ theme, setMenu }) => {
 
   return (
     <Box display="flex" flexDirection="column" height="100%">
-      <h5>
-        <a onClick={() => setMenu("")} href="">
-          &lt;
-        </a>{" "}
-        Reflect on the current week
-      </h5>
       <InputGroup className="mb-2">
         <FormInput
           placeholder="Add an item..."
@@ -167,7 +161,7 @@ const List = ({ theme, setMenu }) => {
         {list.greenItems ? (
           <DroppableList id="G" items={list.greenItems} />
         ) : (
-          <p>Loading...</p>
+          <p align="center">Loading...</p>
         )}
         <div style={{ color: theme.palette.yellow }} className="text-center">
           YELLOW
@@ -175,7 +169,7 @@ const List = ({ theme, setMenu }) => {
         {list.greenItems ? (
           <DroppableList id="Y" items={list.yellowItems} />
         ) : (
-          <p>Loading...</p>
+          <p align="center">Loading...</p>
         )}
         <div style={{ color: theme.palette.red }} className="text-center">
           RED
@@ -183,7 +177,7 @@ const List = ({ theme, setMenu }) => {
         {list.greenItems ? (
           <DroppableList id="R" items={list.redItems} />
         ) : (
-          <p>Loading...</p>
+          <p align="center">Loading...</p>
         )}
       </DragDropContext>
     </Box>

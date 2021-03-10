@@ -10,8 +10,6 @@ const Example = styled.div`
 `;
 
 export default () => {
-  const greeting = chrome.i18n.getMessage("greeting");
-
   return (
     <Example>
       <Box display="flex" alignItems="center">
