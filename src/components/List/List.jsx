@@ -57,7 +57,7 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-const List = ({ theme }) => {
+const List = ({ theme, setMenu }) => {
   const [value, setValue] = useState("");
   const [list, dispatch] = useContext(ListContext);
 
@@ -139,6 +139,12 @@ const List = ({ theme }) => {
 
   return (
     <Box display="flex" flexDirection="column" height="100%">
+      <h5>
+        <a onClick={() => setMenu("")} href="">
+          &lt;
+        </a>{" "}
+        Reflect on the current week
+      </h5>
       <InputGroup className="mb-2">
         <FormInput
           placeholder="Add an item..."
@@ -154,7 +160,6 @@ const List = ({ theme }) => {
           </Button>
         </InputGroupAddon>
       </InputGroup>
-
       <DragDropContext onDragEnd={onDragEnd}>
         <div style={{ color: theme.palette.green }} className="text-center">
           GREEN
