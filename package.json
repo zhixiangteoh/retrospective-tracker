@@ -38,6 +38,7 @@
     "preact-shadow-root": "^1.0.2",
     "prop-types": "^15.7.2",
     "react-beautiful-dnd": "^13.0.0",
+    "react-feather": "^2.0.9",
     "react-switch": "^5.0.1",
     "regenerator-runtime": "^0.13.3",
     "shards-react": "^1.0.3",

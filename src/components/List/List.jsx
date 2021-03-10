@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import { withTheme } from "styled-components";
 import {
   InputGroup,
@@ -8,8 +8,10 @@ import {
   FormInput,
   Button,
   Fade,
+  H1,
 } from "shards-react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { Edit2, Inbox, Minus, Plus } from "react-feather";
 
 import Box from "components/Box";
 import {
@@ -22,22 +24,28 @@ import {
   SET_RED_ITEMS,
 } from "context/List";
 
-const getItemStyle = (isDragging, draggableStyle) => ({
+const getItemStyle = (isDragging, draggableStyle, isHovered) => ({
   // some basic styles to make the items look a bit nicer
   userSelect: "none",
   padding: 8 * 2,
   margin: "0 0 8px 0",
-  boxShadow: "0px 4px 14px rgba(104, 104, 104, 0.1)",
+  boxShadow:
+    isDragging || isHovered
+      ? "0px 0px 10px rgba(0, 0, 0, 0.1)"
+      : "0px 0px 2px rgba(0, 0, 0, 0.2)",
+  transition: "box-shadow 0.3s ease-in-out",
+  position: "relative",
   //   height: 40,
 
   // change background colour if dragging
-  background: isDragging ? "lightgreen" : "white",
+  background: "white",
+  whiteSpace: "pre-wrap",
 
   // styles we need to apply on draggables
   ...draggableStyle,
 });
 
-const getListStyle = (isDraggingOver, items) => ({
+const getListStyle = (isDraggingOver) => ({
   background: isDraggingOver ? "lightblue" : "transparent",
   //   display: "flex",
   //   flexDirection: "column",
@@ -58,7 +66,6 @@ const reorder = (list, startIndex, endIndex) => {
 };
 
 const List = ({ theme }) => {
-  const [value, setValue] = useState("");
   const [list, dispatch] = useContext(ListContext);
 
   const move = (source, destination, droppableSource, droppableDestination) => {
@@ -120,62 +127,55 @@ const List = ({ theme }) => {
     }
   };
 
-  const handleInputChange = ({ target: { value } }) => {
-    setValue(value);
-  };
-
-  const onKeyPress = (event) => {
-    if (event.key.toLowerCase() === "enter") {
-      addItem(event.target.value);
-      setValue("");
-    }
-  };
-
-  const addItem = (item = value) => {
-    if (!item.trim()) return;
-    dispatch({ type: ADD_ITEM, payload: item.trim() });
-    setValue("");
-  };
+  const addItem = (type) =>
+    setList(type, [
+      {
+        id: Math.random()
+          .toString(16)
+          .substr(2),
+        body: "",
+      },
+      ...getList(type),
+    ]);
 
   return (
     <Box display="flex" flexDirection="column" height="100%">
-      <InputGroup className="mb-2">
-        <FormInput
-          placeholder="Add an item..."
-          autoFocus
-          onKeyPress={onKeyPress}
-          type="text"
-          value={value}
-          onChange={handleInputChange}
-        />
-        <InputGroupAddon type="append">
-          <Button theme="primary" onClick={addItem}>
-            Add
-          </Button>
-        </InputGroupAddon>
-      </InputGroup>
       <DragDropContext onDragEnd={onDragEnd}>
-        <div style={{ color: theme.palette.green }} className="text-center">
-          GREEN
-        </div>
+        <Title color={theme.palette.green} addItem={() => addItem("G")}>
+          Green
+        </Title>
         {list.greenItems ? (
-          <DroppableList id="G" items={list.greenItems} />
+          <DroppableList
+            id="G"
+            items={list.greenItems}
+            setItems={(items) => setList("G", items)}
+          />
         ) : (
           <p align="center">Loading...</p>
         )}
-        <div style={{ color: theme.palette.yellow }} className="text-center">
-          YELLOW
-        </div>
+
+        <Title color={theme.palette.yellow} addItem={() => addItem("Y")}>
+          Yellow
+        </Title>
         {list.greenItems ? (
-          <DroppableList id="Y" items={list.yellowItems} />
+          <DroppableList
+            id="Y"
+            items={list.yellowItems}
+            setItems={(items) => setList("Y", items)}
+          />
         ) : (
           <p align="center">Loading...</p>
         )}
-        <div style={{ color: theme.palette.red }} className="text-center">
-          RED
-        </div>
+
+        <Title color={theme.palette.red} addItem={() => addItem("R")}>
+          Red
+        </Title>
         {list.greenItems ? (
-          <DroppableList id="R" items={list.redItems} />
+          <DroppableList
+            id="R"
+            items={list.redItems}
+            setItems={(items) => setList("R", items)}
+          />
         ) : (
           <p align="center">Loading...</p>
         )}
@@ -184,33 +184,187 @@ const List = ({ theme }) => {
   );
 };
 
-const DroppableList = ({ id, items }) => {
+const Title = ({ color, addItem, children }) => (
+  <>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginTop: 16,
+        marginBottom: 4,
+      }}
+    >
+      <h4 style={{ color, margin: 0 }}>{children}</h4>
+      <Button
+        onClick={addItem}
+        outline
+        pill
+        style={{
+          padding: 0,
+        }}
+      >
+        <Plus size={18} />
+      </Button>
+    </div>
+    <div>
+      <div
+        style={{
+          height: 1,
+          width: "100%",
+          background: "#CCC",
+          marginBottom: 8,
+        }}
+      />
+    </div>
+  </>
+);
+
+const DroppableList = ({ id, items, setItems }) => {
+  const [hoverIndex, setHoverIndex] = useState(null);
+  const [editIndex, setEditIndex] = useState(null);
+  const [editValue, setEditValue] = useState("");
+
+  const autoGrow = (element) => {
+    element.style.height = "54px";
+    element.style.height = element.scrollHeight + "px";
+  };
+
+  const handleInputChange = ({ target }) => {
+    setEditValue(target.value.trim());
+    autoGrow(target);
+  };
+
+  const onKeyPress = (event) => {
+    if (event.key.toLowerCase() === "enter" && !event.shiftKey) {
+      editItem();
+    }
+  };
+
+  const editItem = () => {
+    const result = Array.from(items);
+    if (editValue === "" && result[editIndex].body === "") return deleteItem();
+    if (editValue) result[editIndex].body = editValue;
+    setItems(result);
+    setEditValue("");
+    setEditIndex(null);
+  };
+
+  const deleteItem = () => {
+    const index = editIndex;
+    const result = Array.from(items);
+    result.splice(index, 1);
+
+    setEditValue("");
+    setEditIndex(null);
+    setTimeout(() => {
+      setItems(result);
+    }, 50);
+  };
+
+  useEffect(() => {
+    if (items.length > 0 && items[0].body === "") {
+      setEditIndex(0);
+    }
+  }, [items]);
+
   return (
     <Droppable droppableId={id}>
       {(provided, snapshot) => (
         <div
           {...provided.droppableProps}
           ref={provided.innerRef}
-          style={getListStyle(snapshot.isDraggingOver, items.length)}
+          style={getListStyle(snapshot.isDraggingOver)}
         >
-          {items.map((item, index) => (
-            <Draggable key={item.id} draggableId={item.id} index={index}>
-              {(provided, snapshot) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.draggableProps}
-                  {...provided.dragHandleProps}
-                  style={getItemStyle(
-                    snapshot.isDragging,
-                    provided.draggableProps.style
-                  )}
-                >
-                  <div>{item.body}</div>
-                  {provided.placeholder}
-                </div>
-              )}
-            </Draggable>
-          ))}
+          {items.length === 0 && !snapshot.isDraggingOver ? (
+            <h6 className="text-center" style={{ color: "#CCC" }}>
+              Nothing to show
+            </h6>
+          ) : (
+            items.map((item, index) => (
+              <Draggable key={item.id} draggableId={item.id} index={index}>
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    style={
+                      editIndex === index
+                        ? {
+                            ...provided.draggableProps.style,
+                            position: "relative",
+                          }
+                        : getItemStyle(
+                            snapshot.isDragging,
+                            provided.draggableProps.style,
+                            hoverIndex === index
+                          )
+                    }
+                    onMouseEnter={() => setHoverIndex(index)}
+                    onMouseLeave={() => setHoverIndex(null)}
+                  >
+                    {editIndex === index ? (
+                      <>
+                        <FormTextarea
+                          innerRef={(input) => {
+                            input && input.focus();
+                          }}
+                          value={editValue}
+                          style={{
+                            padding: 16,
+                            margin: "0 0 7px 0",
+                            height: 54,
+                            resize: "none",
+                            overflow: "hidden",
+                          }}
+                          onFocus={(el) => autoGrow(el.srcElement)}
+                          onBlur={editItem}
+                          onChange={handleInputChange}
+                          onKeyPress={onKeyPress}
+                        />
+                        <Button
+                          onClick={deleteItem}
+                          pill
+                          theme="danger"
+                          style={{
+                            position: "absolute",
+                            top: -5,
+                            right: -5,
+                            padding: 0,
+                          }}
+                        >
+                          <Minus size={18} />
+                        </Button>
+                      </>
+                    ) : (
+                      <div>{item.body}</div>
+                    )}
+
+                    {hoverIndex === index && editIndex !== index && (
+                      <Button
+                        onClick={() => {
+                          setEditIndex(index);
+                          setEditValue(item.body);
+                        }}
+                        pill
+                        theme="light"
+                        style={{
+                          position: "absolute",
+                          top: 15,
+                          right: 15,
+                          padding: 4,
+                        }}
+                      >
+                        <Edit2 size={16} />
+                      </Button>
+                    )}
+
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Draggable>
+            ))
+          )}
           {provided.placeholder}
         </div>
       )}

@@ -8,6 +8,7 @@ const Container = styled.div`
   box-sizing: border-box;
   width: 500px;
   padding: 20px;
+  background: #fbfbfb;
 `;
 
 const ListContainer = ({ setMenu, header, children }) => {

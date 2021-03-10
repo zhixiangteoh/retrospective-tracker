@@ -5,8 +5,8 @@ export default {
   palette: {
     primary: "#488eff",
     secondary: "#FFFFFF",
-    green: "#7ed957",
-    yellow: "#ffde59",
-    red: "#ff5757",
+    green: "#20bf6b",
+    yellow: "#f7b731",
+    red: "#ee5253",
   },
 };
