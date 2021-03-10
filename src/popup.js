@@ -6,21 +6,21 @@ import defaultTheme from "themes/default";
 
 import Box from "components/Box";
 import Example from "components/Example";
-import MainMenu from "components/MainMenu";
 import Current from "components/Current";
 import PreviousList from "components/PreviousList";
+import { Nav, NavItem, NavLink } from "shards-react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 
 const Popup = () => {
-  const [page, setPage] = useState("");
+  const [page, setPage] = useState("current");
 
   const renderPage = () => {
     switch (page) {
       case "current":
-        return <Current setMenu={setPage} />;
+        return <Current />;
       case "previous":
-        return <PreviousList setMenu={setPage} />;
+        return <PreviousList />;
       case "actions":
         return <Current />;
       default:
@@ -33,11 +33,36 @@ const Popup = () => {
       {/* <Box width="200px" padding={3}>
         <Example />
       </Box> */}
-      {page ? (
-        renderPage()
-      ) : (
-        <MainMenu menu={page} setMenu={(page) => setPage(page)} />
-      )}
+      <Nav pills fill justified style={{ margin: "8px" }}>
+        <NavItem>
+          <NavLink
+            style={{ cursor: "pointer" }}
+            active={page === "current"}
+            onClick={() => setPage("current")}
+          >
+            Current
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            style={{ cursor: "pointer" }}
+            active={page === "previous"}
+            onClick={() => setPage("previous")}
+          >
+            Previous
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            style={{ cursor: "pointer" }}
+            active={page === "actions"}
+            onClick={() => setPage("actions")}
+          >
+            Action Items
+          </NavLink>
+        </NavItem>
+      </Nav>
+      {renderPage()}
     </ThemeProvider>
   );
 };
