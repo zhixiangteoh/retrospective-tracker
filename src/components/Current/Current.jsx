@@ -7,11 +7,12 @@ import ListContainer from "components/ListContainer";
 import ListHeader from "components/ListHeader";
 import { ListProvider } from "context/List";
 import getMondayDate from "util/getMondayDate";
+import getddmm from "../../util/getddmm";
 
-const Action = () => {
+const Action = (props) => {
   return (
-    <Button outline style={{ border: 0, padding: 0 }}>
-      <Save size={25} />
+    <Button outline pill size="sm" {...props}>
+      Save Week
     </Button>
   );
 };
@@ -23,7 +24,6 @@ const Current = ({ setMenu, currentMonday, setCurrentMonday }) => {
     const nextMonday = getMondayDate(
       new Date(key.getTime() + 7 * 24 * 60 * 60 * 1000)
     ); // Monday of next week
-    console.log(nextMonday);
     setKey(nextMonday);
     setCurrentMonday(nextMonday);
   };
@@ -31,13 +31,25 @@ const Current = ({ setMenu, currentMonday, setCurrentMonday }) => {
   return (
     <ListProvider storageKey={key}>
       <ListContainer setMenu={setMenu} header="Reflect on the current week">
-        <ListHeader
-          header={"Current week"}
-          mondayDate={key}
-          isCollapsible={false}
-          action={<Action />}
-          onClick={handleSave}
-        />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: 20,
+          }}
+        >
+          <div
+            style={{
+              fontSize: 14,
+              fontWeight: 700,
+              color: "#333",
+            }}
+          >
+            {`${getddmm(key)} - ${getddmm(key.addDays ? key.addDays(5) : key)}`}
+          </div>
+          <Action onClick={handleSave} />
+        </div>
         <List />
       </ListContainer>
     </ListProvider>

@@ -15,6 +15,8 @@ const PreviousList = ({ setMenu, currentMonday, firstMonday }) => {
     setDates(getDates());
   }, []);
 
+  const [activeInd, setActiveInd] = useState(null);
+
   // for test
   const getDates = () => {
     let daySpan = getDayDiff(currentMonday, firstMonday);
@@ -38,41 +40,42 @@ const PreviousList = ({ setMenu, currentMonday, firstMonday }) => {
     return dates.map((date, idx) => {
       return (
         <PreviousElt
-          collapsedDefault={idx === 0 ? false : true}
           header={idx === 0 ? "Previous week" : `Week ${dates.length - idx}`}
           date={date}
           setMenu={setMenu}
+          active={activeInd === idx}
+          setActive={(active) => setActiveInd(active ? null : idx)}
         />
       );
     });
   };
 
   return (
-    <ListContainer
-      setMenu={setMenu}
-      header="Review previous weeks' retrospectives"
-    >
+    <ListContainer setMenu={setMenu} header="Review past retrospectives">
       {renderList()}
     </ListContainer>
   );
 };
 
-const PreviousElt = ({ collapsedDefault, header, date, setMenu }) => {
-  const [collapsed, setCollapsed] = useState(collapsedDefault);
-  console.log(collapsed);
+const PreviousElt = ({ header, date, setMenu, active, setActive }) => {
   return (
-    <>
+    <div style={{ marginBottom: 4 }}>
       <ListHeader
         header={header}
         mondayDate={date}
         isCollapsible={true}
-        action={<Action collapsed={collapsed} />}
-        onClick={() => setCollapsed(!collapsed)}
+        active={active}
+        onClick={(el) => {
+          if (active) el.nativeEvent.srcElement.blur();
+          setActive(active);
+        }}
       />
-      <Collapse open={!collapsed}>
-        <Previous key={date} setMenu={setMenu} date={date} />
-      </Collapse>
-    </>
+      <div style={{ marginTop: 10, marginBottom: 10 }}>
+        <Collapse open={active}>
+          <Previous key={date} setMenu={setMenu} date={date} />
+        </Collapse>
+      </div>
+    </div>
   );
 };
 

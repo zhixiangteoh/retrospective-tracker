@@ -15,6 +15,12 @@ import "./popup.css";
 
 import getMondayDate from "util/getMondayDate";
 
+Date.prototype.addDays = function(days) {
+  var date = new Date(this.valueOf());
+  date.setDate(date.getDate() + days);
+  return date;
+};
+
 const thisMonday = getMondayDate(new Date());
 // to change
 const firstMonday = getMondayDate(new Date("2/1/2021"));
@@ -52,7 +58,7 @@ const Popup = () => {
       {/* <Box width="200px" padding={3}>
         <Example />
       </Box> */}
-      <Nav pills fill justified style={{ margin: "8px" }}>
+      <Nav pills fill justified style={{ padding: "8px", background: "white" }}>
         <NavItem>
           <NavLink
             style={{ cursor: "pointer" }}
@@ -89,5 +95,6 @@ const Popup = () => {
 const root = document.createElement("div");
 document.body.appendChild(root);
 document.body.style.margin = 0;
+document.body.style.background = "#fafafa";
 
 ReactDOM.render(<Popup />, root);

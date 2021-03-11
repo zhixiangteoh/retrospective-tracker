@@ -224,7 +224,7 @@ const Title = ({ color, addItem, children, showAddButton }) => {
           marginBottom: 4,
         }}
       >
-        <h4 style={{ color, margin: 0 }}>{children}</h4>
+        <h5 style={{ color, margin: 0 }}>{children}</h5>
         {showAddButton && (
           <Button
             onClick={addItem}
