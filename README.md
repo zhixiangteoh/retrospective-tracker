@@ -2,6 +2,10 @@
 
 > Browser extension designed to conveniently create and track weekly retrospectives for the MLH Fellowship.
 
+<div align="center">
+<img src="src/assets/img/icon-128x128.png" />
+</div>
+
 ## Features
 TBC
 

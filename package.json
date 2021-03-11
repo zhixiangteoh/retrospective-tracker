@@ -1,9 +1,9 @@
 {
-  "version": "1.0.1",
-  "name": "react-browser-extension-boilerplate",
+  "version": "0.1",
+  "name": "Retrospective-Tracker",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ElForastero/react-browser-extension-boilerplate"
+    "url": "https://github.com/zhixiangteoh/retrospective-tracker"
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production yarn webpack -c webpack.config.js --mode production",
@@ -32,12 +32,17 @@
     "@styled-system/prop-types": "^5.1.2",
     "classnames": "^2.2.6",
     "core-js": "^3.3.3",
+    "css-loader": "^5.1.1",
     "lodash.omit": "^4.5.0",
     "preact": "^10.0.1",
     "preact-shadow-root": "^1.0.2",
     "prop-types": "^15.7.2",
+    "react-beautiful-dnd": "^13.0.0",
+    "react-feather": "^2.0.9",
     "react-switch": "^5.0.1",
     "regenerator-runtime": "^0.13.3",
+    "shards-react": "^1.0.3",
+    "style-loader": "^2.0.0",
     "styled-components": "^4.4.0",
     "styled-system": "^5.1.2",
     "use-click-outside": "^1.1.0",
