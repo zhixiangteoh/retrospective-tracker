@@ -14,6 +14,7 @@ import "shards-ui/dist/css/shards.min.css";
 import "./popup.css";
 
 import getMondayDate from "util/getMondayDate";
+import Actions from "./components/Actions";
 
 Date.prototype.addDays = function(days) {
   var date = new Date(this.valueOf());
@@ -47,7 +48,7 @@ const Popup = () => {
           />
         );
       case "actions":
-        return <Current />;
+        return <Actions />;
       default:
         return null;
     }
