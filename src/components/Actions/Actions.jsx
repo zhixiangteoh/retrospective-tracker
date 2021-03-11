@@ -1,7 +1,7 @@
 import React, { useState } from "react";
+import { withTheme } from "styled-components";
 import ListContainer from "../ListContainer/ListContainer";
 import {
-  Button,
   Nav,
   NavItem,
   NavLink,
@@ -12,7 +12,7 @@ import {
 } from "shards-react";
 import { MoreVertical, Trash } from "react-feather";
 
-const Actions = ({ theme }) => {
+const Actions = () => {
   const [tab, setTab] = useState("Y");
   const [yellowItems, setYellowItems] = useState([
     { id: "1", body: "asdfasdfasd" },
@@ -33,7 +33,7 @@ const Actions = ({ theme }) => {
   );
 };
 
-const Issues = ({ items }) => {
+const Issues = withTheme(({ items, theme }) => {
   const [hoverIdx, setHoverIdx] = useState(null);
   const [dropdownIdx, setDropdownIdx] = useState(null);
   return (
@@ -80,7 +80,7 @@ const Issues = ({ items }) => {
                   <DropdownItem>Move to Red</DropdownItem>
                   <DropdownItem
                     style={{
-                      color: "#ee5253",
+                      color: theme.palette.red,
                       display: "flex",
                       justifyContent: "flex-start",
                       alignItems: "center",
@@ -96,13 +96,13 @@ const Issues = ({ items }) => {
       ))}
     </>
   );
-};
+});
 
-const NavBar = ({ tab, setTab, theme }) => (
+const NavBar = withTheme(({ tab, setTab, theme }) => (
   <Nav tabs fill style={{ marginBottom: 16 }}>
     <NavItem>
       <NavLink
-        style={{ cursor: "pointer", fontSize: 14, color: "#f7b731" }}
+        style={{ cursor: "pointer", fontSize: 14, color: theme.palette.yellow }}
         active={tab === "Y"}
         onClick={() => setTab("Y")}
       >
@@ -111,7 +111,7 @@ const NavBar = ({ tab, setTab, theme }) => (
     </NavItem>
     <NavItem>
       <NavLink
-        style={{ cursor: "pointer", fontSize: 14, color: "#ee5253" }}
+        style={{ cursor: "pointer", fontSize: 14, color: theme.palette.red }}
         active={tab === "R"}
         onClick={() => setTab("R")}
       >
@@ -119,6 +119,6 @@ const NavBar = ({ tab, setTab, theme }) => (
       </NavLink>
     </NavItem>
   </Nav>
-);
+));
 
 export default Actions;

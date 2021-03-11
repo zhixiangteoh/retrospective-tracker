@@ -1,15 +1,6 @@
 import React, { useState, useContext, useRef, useEffect } from "react";
 import { withTheme } from "styled-components";
-import {
-  InputGroup,
-  InputGroupText,
-  InputGroupAddon,
-  FormTextarea,
-  FormInput,
-  Button,
-  Fade,
-  H1,
-} from "shards-react";
+import { FormTextarea, Button } from "shards-react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Edit2, Inbox, Minus, Plus } from "react-feather";
 

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Collapse } from "shards-react";
-import { ChevronDown, ChevronUp } from "react-feather";
+import { Collapse } from "shards-react";
 
 import Previous from "components/Previous";
 import ListContainer from "components/ListContainer";
@@ -76,14 +75,6 @@ const PreviousElt = ({ header, date, setMenu, active, setActive }) => {
         </Collapse>
       </div>
     </div>
-  );
-};
-
-const Action = ({ collapsed }) => {
-  return (
-    <Button outline style={{ border: 0, padding: 0 }}>
-      {collapsed ? <ChevronDown size={25} /> : <ChevronUp size={25} />}
-    </Button>
   );
 };
 

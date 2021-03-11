@@ -4,8 +4,6 @@ import ReactDOM from "react-dom";
 import { ThemeProvider } from "styled-components";
 import defaultTheme from "themes/default";
 
-import Box from "components/Box";
-import Example from "components/Example";
 import Current from "components/Current";
 import PreviousList from "components/PreviousList";
 import Actions from "components/Actions";
@@ -104,8 +102,9 @@ const Popup = () => {
           className="text-center highlight-text"
           style={{
             color: "#CCC",
+            fontSize: 16,
             fontWeight: 700,
-            marginBottom: 60,
+            marginBottom: 40,
             cursor: "pointer",
             transition: "0.3s",
           }}

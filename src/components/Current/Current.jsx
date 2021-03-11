@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import { Button } from "shards-react";
-import { Save } from "react-feather";
 
 import List from "components/List";
 import ListContainer from "components/ListContainer";
-import ListHeader from "components/ListHeader";
 import { ListProvider } from "context/List";
 import getMondayDate from "util/getMondayDate";
 import getddmm from "../../util/getddmm";
 
-const Action = (props) => {
+const Save = (props) => {
   return (
     <Button outline pill size="sm" {...props}>
-      Save Week
+      Start New Week
     </Button>
   );
 };
@@ -48,7 +46,7 @@ const Current = ({ setMenu, currentMonday, setCurrentMonday }) => {
           >
             {`${getddmm(key)} - ${getddmm(key.addDays ? key.addDays(5) : key)}`}
           </div>
-          <Action onClick={handleSave} />
+          <Save onClick={handleSave} />
         </div>
         <List />
       </ListContainer>
