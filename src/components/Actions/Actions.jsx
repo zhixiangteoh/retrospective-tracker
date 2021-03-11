@@ -99,10 +99,10 @@ const Issues = ({ items }) => {
 };
 
 const NavBar = ({ tab, setTab, theme }) => (
-  <Nav tabs style={{ marginBottom: 16 }}>
+  <Nav tabs fill style={{ marginBottom: 16 }}>
     <NavItem>
       <NavLink
-        style={{ cursor: "pointer", color: "#f7b731" }}
+        style={{ cursor: "pointer", fontSize: 14, color: "#f7b731" }}
         active={tab === "Y"}
         onClick={() => setTab("Y")}
       >
@@ -111,7 +111,7 @@ const NavBar = ({ tab, setTab, theme }) => (
     </NavItem>
     <NavItem>
       <NavLink
-        style={{ cursor: "pointer", color: "#ee5253" }}
+        style={{ cursor: "pointer", fontSize: 14, color: "#ee5253" }}
         active={tab === "R"}
         onClick={() => setTab("R")}
       >

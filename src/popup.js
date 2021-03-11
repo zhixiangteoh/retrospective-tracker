@@ -8,13 +8,13 @@ import Box from "components/Box";
 import Example from "components/Example";
 import Current from "components/Current";
 import PreviousList from "components/PreviousList";
+import Actions from "components/Actions";
 import { Nav, NavItem, NavLink } from "shards-react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 import "./popup.css";
 
 import getMondayDate from "util/getMondayDate";
-import Actions from "./components/Actions";
 
 Date.prototype.addDays = function(days) {
   var date = new Date(this.valueOf());
