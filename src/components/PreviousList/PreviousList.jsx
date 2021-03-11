@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import Previous from "components/Previous";
 import ListContainer from "components/ListContainer";
 import ListHeader from "components/ListHeader";
+import { Button } from "shards-react";
+import { ChevronDown, ChevronUp } from "react-feather";
 import { Collapse } from "shards-react";
 
 // for test
@@ -53,11 +55,20 @@ const PreviousElt = ({ header, date, setMenu, collapsedDefault }) => {
       <ListHeader
         header={header}
         mondayDate={date}
-        collapsed={collapsed}
+        isCollapsible={true}
+        action={<Action collapsed={collapsed} />}
         onClick={() => setCollapsed(!collapsed)}
       />
       {collapsed ? null : <Previous key={date} setMenu={setMenu} date={date} />}
     </>
+  );
+};
+
+const Action = ({ collapsed }) => {
+  return (
+    <Button outline style={{ border: 0, padding: 0 }}>
+      {collapsed ? <ChevronDown size={25} /> : <ChevronUp size={25} />}
+    </Button>
   );
 };
 

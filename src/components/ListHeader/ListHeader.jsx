@@ -1,10 +1,18 @@
 import React from "react";
 import { Button } from "shards-react";
-import { ChevronDown, ChevronUp } from "react-feather";
+import { ChevronDown, ChevronUp, Save } from "react-feather";
 
 import getmmmddyyyy from "util/getmmmddyyyy";
 
-const ListHeader = ({ header, mondayDate, collapsed, ...props }) => {
+const ListHeader = ({
+  header,
+  mondayDate,
+  isCollapsible,
+  collapsed,
+  action,
+  ...props
+}) => {
+  const Action = action ? action : null;
   return (
     <Button
       outline
@@ -22,7 +30,7 @@ const ListHeader = ({ header, mondayDate, collapsed, ...props }) => {
       {...props}
     >
       <div className="text-uppercase">{header}</div>
-      {collapsed ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
+      {action ? Action : null}
       <div className="text-uppercase">{`Mon ${getmmmddyyyy(mondayDate)}`}</div>
     </Button>
   );

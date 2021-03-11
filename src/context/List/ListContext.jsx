@@ -35,7 +35,7 @@ const ListProvider = ({ storageKey, children }) => {
     });
     dispatch({ type: INIT, payload: storage[storageKey] });
     initRef.current = true;
-  }, []);
+  }, [storageKey]);
 
   return (
     <ListContext.Provider value={[state, dispatch]}>
