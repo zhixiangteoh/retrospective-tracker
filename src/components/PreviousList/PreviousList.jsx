@@ -59,7 +59,7 @@ const PreviousList = ({ setMenu, currentMonday, firstMonday }) => {
 
 const PreviousElt = ({ collapsedDefault, header, date, setMenu }) => {
   const [collapsed, setCollapsed] = useState(collapsedDefault);
-
+  console.log(collapsed);
   return (
     <>
       <ListHeader
@@ -69,7 +69,9 @@ const PreviousElt = ({ collapsedDefault, header, date, setMenu }) => {
         action={<Action collapsed={collapsed} />}
         onClick={() => setCollapsed(!collapsed)}
       />
-      {collapsed ? null : <Previous key={date} setMenu={setMenu} date={date} />}
+      <Collapse open={!collapsed}>
+        <Previous key={date} setMenu={setMenu} date={date} />
+      </Collapse>
     </>
   );
 };
