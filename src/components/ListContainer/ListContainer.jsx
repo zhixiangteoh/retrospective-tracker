@@ -4,7 +4,6 @@ import styled from "styled-components";
 import PageHeader from "components/PageHeader";
 
 const Container = styled.div`
-  height: 600px;
   box-sizing: border-box;
   width: 500px;
   padding: 20px;

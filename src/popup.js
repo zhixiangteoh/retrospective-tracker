@@ -56,10 +56,18 @@ const Popup = () => {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      {/* <Box width="200px" padding={3}>
-        <Example />
-      </Box> */}
-      <Nav pills fill justified style={{ padding: "8px", background: "white" }}>
+      <Nav
+        pills
+        fill
+        justified
+        style={{
+          padding: "8px",
+          background: "white",
+          position: "fixed",
+          width: "100%",
+          boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
+        }}
+      >
         <NavItem>
           <NavLink
             style={{ cursor: "pointer" }}
@@ -88,7 +96,24 @@ const Popup = () => {
           </NavLink>
         </NavItem>
       </Nav>
-      {renderPage()}
+      <div style={{ height: 60 }} />
+      <div style={{ height: 540, overflow: "scroll" }}>
+        {renderPage()}
+
+        <div
+          className="text-center highlight-text"
+          style={{
+            color: "#CCC",
+            fontWeight: 700,
+            marginBottom: 60,
+            cursor: "pointer",
+            transition: "0.3s",
+          }}
+          onClick={() => {}}
+        >
+          Reset all settings
+        </div>
+      </div>
     </ThemeProvider>
   );
 };
