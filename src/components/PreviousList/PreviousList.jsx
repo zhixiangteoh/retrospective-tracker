@@ -1,8 +1,9 @@
-import React, { Fragment } from "react";
+import React, { useState } from "react";
 
 import Previous from "components/Previous";
 import ListContainer from "components/ListContainer";
 import ListHeader from "components/ListHeader";
+import { Collapse } from "shards-react";
 
 // for test
 const getDates = () => {
@@ -24,12 +25,12 @@ const PreviousList = ({ setMenu }) => {
 
     return dates.map((date, idx) => {
       return (
-        <Fragment>
-          <ListHeader
-            header={idx === 0 ? "Previous week" : `Week ${dates.length - idx}`}
-          />
-          <Previous key={date} setMenu={setMenu} date={date} />
-        </Fragment>
+        <PreviousElt
+          collapsedDefault={idx === 0 ? false : true}
+          header={idx === 0 ? "Previous week" : `Week ${dates.length - idx}`}
+          date={date}
+          setMenu={setMenu}
+        />
       );
     });
   };
@@ -41,6 +42,33 @@ const PreviousList = ({ setMenu }) => {
     >
       {renderList()}
     </ListContainer>
+  );
+};
+
+const PreviousElt = ({ header, date, setMenu, collapsedDefault }) => {
+  const [collapsed, setCollapsed] = useState(collapsedDefault);
+
+  const onHover = (event) => {
+    event.target.style.background = "#f5f5f5";
+    event.target.style.cursor = "pointer";
+  };
+
+  const onExit = (event) => {
+    event.target.style.background = "";
+    event.target.style.cursor = "";
+  };
+
+  return (
+    <>
+      <ListHeader
+        onMouseEnter={(event) => onHover(event)}
+        onMouseOut={(event) => onExit(event)}
+        onClick={() => setCollapsed(!collapsed)}
+        header={header}
+        mondayDate={date}
+      />
+      {collapsed ? null : <Previous key={date} setMenu={setMenu} date={date} />}
+    </>
   );
 };
 
