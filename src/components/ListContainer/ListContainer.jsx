@@ -11,10 +11,12 @@ const Container = styled.div`
   background: #fbfbfb;
 `;
 
-const ListContainer = ({ setMenu, header, children }) => {
+const ListContainer = ({ setMenu, header, children, action }) => {
   return (
     <Container>
-      {header ? <PageHeader setMenu={setMenu} header={header} /> : null}
+      {header ? (
+        <PageHeader setMenu={setMenu} header={header} action={action} />
+      ) : null}
       {children}
     </Container>
   );
