@@ -10,7 +10,9 @@ const Previous = ({ setMenu, date }) => {
 
   return (
     <ListProvider storageKey={key}>
-      <List />
+      <div className="mb-4">
+        <List />
+      </div>
     </ListProvider>
   );
 };

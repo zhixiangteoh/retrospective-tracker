@@ -191,7 +191,7 @@ const Title = ({ color, addItem, children }) => (
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        marginTop: 16,
+        marginTop: 4,
         marginBottom: 4,
       }}
     >
