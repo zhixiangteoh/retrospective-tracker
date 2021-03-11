@@ -8,9 +8,9 @@ import ListHeader from "components/ListHeader";
 import { ListProvider } from "context/List";
 import getMondayDate from "util/getMondayDate";
 
-const Action = ({ handleAction }) => {
+const Action = () => {
   return (
-    <Button outline style={{ border: 0, padding: 0 }} onClick={handleAction}>
+    <Button outline style={{ border: 0, padding: 0 }}>
       <Save size={25} />
     </Button>
   );
