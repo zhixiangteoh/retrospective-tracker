@@ -67,6 +67,7 @@ const reorder = (list, startIndex, endIndex) => {
 
 const List = ({ theme }) => {
   const [list, dispatch] = useContext(ListContext);
+  const [hoveredList, setHoveredList] = useState(null);
 
   const move = (source, destination, droppableSource, droppableDestination) => {
     const sourceClone = Array.from(source);
@@ -141,84 +142,115 @@ const List = ({ theme }) => {
   return (
     <Box display="flex" flexDirection="column" height="100%">
       <DragDropContext onDragEnd={onDragEnd}>
-        <Title color={theme.palette.green} addItem={() => addItem("G")}>
-          Green
-        </Title>
-        {list.greenItems ? (
-          <DroppableList
-            id="G"
-            items={list.greenItems}
-            setItems={(items) => setList("G", items)}
-          />
-        ) : (
-          <p align="center">Loading...</p>
-        )}
+        <div
+          onMouseLeave={() => setHoveredList(null)}
+          onMouseEnter={() => setHoveredList("G")}
+        >
+          <Title
+            color={theme.palette.green}
+            addItem={() => addItem("G")}
+            showAddButton={hoveredList === "G"}
+          >
+            Green
+          </Title>
+          {list.greenItems ? (
+            <DroppableList
+              id="G"
+              items={list.greenItems}
+              setItems={(items) => setList("G", items)}
+            />
+          ) : (
+            <p align="center">Loading...</p>
+          )}
+        </div>
 
-        <Title color={theme.palette.yellow} addItem={() => addItem("Y")}>
-          Yellow
-        </Title>
-        {list.greenItems ? (
-          <DroppableList
-            id="Y"
-            items={list.yellowItems}
-            setItems={(items) => setList("Y", items)}
-          />
-        ) : (
-          <p align="center">Loading...</p>
-        )}
+        <div
+          onMouseLeave={() => setHoveredList(null)}
+          onMouseEnter={() => setHoveredList("Y")}
+        >
+          <Title
+            color={theme.palette.yellow}
+            addItem={() => addItem("Y")}
+            showAddButton={hoveredList === "Y"}
+          >
+            Yellow
+          </Title>
+          {list.greenItems ? (
+            <DroppableList
+              id="Y"
+              items={list.yellowItems}
+              setItems={(items) => setList("Y", items)}
+            />
+          ) : (
+            <p align="center">Loading...</p>
+          )}
+        </div>
 
-        <Title color={theme.palette.red} addItem={() => addItem("R")}>
-          Red
-        </Title>
-        {list.greenItems ? (
-          <DroppableList
-            id="R"
-            items={list.redItems}
-            setItems={(items) => setList("R", items)}
-          />
-        ) : (
-          <p align="center">Loading...</p>
-        )}
+        <div
+          onMouseLeave={() => setHoveredList(null)}
+          onMouseEnter={() => setHoveredList("R")}
+        >
+          <Title
+            color={theme.palette.red}
+            addItem={() => addItem("R")}
+            showAddButton={hoveredList === "R"}
+          >
+            Red
+          </Title>
+          {list.greenItems ? (
+            <DroppableList
+              id="R"
+              items={list.redItems}
+              setItems={(items) => setList("R", items)}
+            />
+          ) : (
+            <p align="center">Loading...</p>
+          )}
+        </div>
       </DragDropContext>
     </Box>
   );
 };
 
-const Title = ({ color, addItem, children }) => (
-  <>
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginTop: 4,
-        marginBottom: 4,
-      }}
-    >
-      <h4 style={{ color, margin: 0 }}>{children}</h4>
-      <Button
-        onClick={addItem}
-        outline
-        pill
-        style={{
-          padding: 0,
-        }}
-      >
-        <Plus size={18} />
-      </Button>
-    </div>
-    <div>
+const Title = ({ color, addItem, children, showAddButton }) => {
+  return (
+    <>
       <div
         style={{
-          height: 1,
-          width: "100%",
-          background: "#CCC",
-          marginBottom: 8,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginTop: 4,
+          marginBottom: 4,
         }}
-      />
-    </div>
-  </>
-);
+      >
+        <h4 style={{ color, margin: 0 }}>{children}</h4>
+        {showAddButton && (
+          <Button
+            onClick={addItem}
+            outline
+            pill
+            style={{
+              padding: 0,
+            }}
+          >
+            <Plus size={18} />
+          </Button>
+        )}
+      </div>
+      <div>
+        <div
+          style={{
+            height: 1,
+            width: "100%",
+            background: "#CCC",
+            marginBottom: 8,
+          }}
+        />
+      </div>
+    </>
+  );
+};
 
 const DroppableList = ({ id, items, setItems }) => {
   const [hoverIndex, setHoverIndex] = useState(null);
