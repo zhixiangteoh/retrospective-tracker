@@ -33,7 +33,17 @@ const ListHeader = ({
           color: active ? "#333" : "#BBB",
           transition: "0.3s",
         }}
-      >{`${getddmm(mondayDate)} - ${getddmm(mondayDate.addDays(5))}`}</div>
+      >
+        {`${getddmm(mondayDate)} - ${getddmm(mondayDate.addDays(5))}`}
+        <ChevronUp
+          style={{
+            transform: active ? "rotateX(0deg)" : "rotateX(180deg)",
+            transition: "0.3s",
+            marginLeft: 5,
+            marginRight: -10,
+          }}
+        />
+      </div>
     </Button>
   );
 };
