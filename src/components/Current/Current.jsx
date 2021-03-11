@@ -16,14 +16,16 @@ const Action = () => {
   );
 };
 
-const Current = ({ setMenu }) => {
-  const thisMonday = getMondayDate(new Date());
-  const [key, setKey] = useState(thisMonday);
+const Current = ({ setMenu, currentMonday, setCurrentMonday }) => {
+  const [key, setKey] = useState(currentMonday);
 
   const handleSave = () => {
-    const nextMonday = new Date(new Date().setDate(key.getDate() + 7)); // Monday of next week
+    const nextMonday = getMondayDate(
+      new Date(key.getTime() + 7 * 24 * 60 * 60 * 1000)
+    ); // Monday of next week
     console.log(nextMonday);
     setKey(nextMonday);
+    setCurrentMonday(nextMonday);
   };
 
   return (

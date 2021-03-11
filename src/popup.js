@@ -12,15 +12,33 @@ import { Nav, NavItem, NavLink } from "shards-react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 
+import getMondayDate from "util/getMondayDate";
+
+const thisMonday = getMondayDate(new Date());
+// to change
+const firstMonday = getMondayDate(new Date("2/1/2021"));
+
 const Popup = () => {
   const [page, setPage] = useState("current");
+  const [currentMonday, setCurrentMonday] = useState(thisMonday);
 
   const renderPage = () => {
     switch (page) {
       case "current":
-        return <Current />;
+        return (
+          <Current
+            currentMonday={currentMonday}
+            setCurrentMonday={setCurrentMonday}
+          />
+        );
       case "previous":
-        return <PreviousList />;
+        return (
+          <PreviousList
+            currentMonday={currentMonday}
+            // to change
+            firstMonday={firstMonday}
+          />
+        );
       case "actions":
         return <Current />;
       default:

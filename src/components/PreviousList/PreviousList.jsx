@@ -1,30 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Button, Collapse } from "shards-react";
+import { ChevronDown, ChevronUp } from "react-feather";
 
 import Previous from "components/Previous";
 import ListContainer from "components/ListContainer";
 import ListHeader from "components/ListHeader";
-import { Button } from "shards-react";
-import { ChevronDown, ChevronUp } from "react-feather";
-import { Collapse } from "shards-react";
+import getDayDiff from "util/getDayDiff";
 
-// for test
-const getDates = () => {
-  let daysArr = [];
-  for (let week = 1; week < 5; week++) {
-    // 0: current, 1: previous week, 2: 2 weeks ago, 3: 3 weeks ago, 4: 4 weeks ago
-    const daysToSubtract = week * 7;
-    daysArr.push(daysToSubtract);
-  }
+const PreviousList = ({ setMenu, currentMonday, firstMonday }) => {
+  const [dates, setDates] = useState([]);
 
-  return daysArr.map(
-    (days) => new Date(new Date().setDate(new Date().getDate() - days))
-  );
-};
+  useEffect(() => {
+    console.log(getDates());
+    setDates(getDates());
+  }, []);
 
-const PreviousList = ({ setMenu }) => {
+  // for test
+  const getDates = () => {
+    let daySpan = getDayDiff(currentMonday, firstMonday);
+    let daysArr = [];
+    let week = 1;
+
+    while (daySpan > 0) {
+      const daysToSubtract = week * 7;
+      daysArr.push(daysToSubtract);
+
+      week++;
+      daySpan -= 7;
+    }
+
+    return daysArr.map(
+      (days) => new Date(new Date().setDate(currentMonday.getDate() - days))
+    );
+  };
+
   const renderList = () => {
-    const dates = getDates();
-
     return dates.map((date, idx) => {
       return (
         <PreviousElt
@@ -47,7 +57,7 @@ const PreviousList = ({ setMenu }) => {
   );
 };
 
-const PreviousElt = ({ header, date, setMenu, collapsedDefault }) => {
+const PreviousElt = ({ collapsedDefault, header, date, setMenu }) => {
   const [collapsed, setCollapsed] = useState(collapsedDefault);
 
   return (
