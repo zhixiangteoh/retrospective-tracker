@@ -48,24 +48,13 @@ const PreviousList = ({ setMenu }) => {
 const PreviousElt = ({ header, date, setMenu, collapsedDefault }) => {
   const [collapsed, setCollapsed] = useState(collapsedDefault);
 
-  const onHover = (event) => {
-    event.target.style.background = "#f5f5f5";
-    event.target.style.cursor = "pointer";
-  };
-
-  const onExit = (event) => {
-    event.target.style.background = "";
-    event.target.style.cursor = "";
-  };
-
   return (
     <>
       <ListHeader
-        onMouseEnter={(event) => onHover(event)}
-        onMouseOut={(event) => onExit(event)}
-        onClick={() => setCollapsed(!collapsed)}
         header={header}
         mondayDate={date}
+        collapsed={collapsed}
+        onClick={() => setCollapsed(!collapsed)}
       />
       {collapsed ? null : <Previous key={date} setMenu={setMenu} date={date} />}
     </>
