@@ -75,9 +75,18 @@ const Issues = withTheme(({ items, theme }) => {
                   <MoreVertical size={20} />
                 </DropdownToggle>
                 <DropdownMenu right>
-                  <DropdownItem>Move to Green</DropdownItem>
-                  <DropdownItem>Move to Yellow</DropdownItem>
-                  <DropdownItem>Move to Red</DropdownItem>
+                  <DropdownItem>
+                    Move to{" "}
+                    <span style={{ color: theme.palette.green }}>Green</span>
+                  </DropdownItem>
+                  <DropdownItem>
+                    Move to{" "}
+                    <span style={{ color: theme.palette.yellow }}>Yellow</span>
+                  </DropdownItem>
+                  <DropdownItem>
+                    Move to{" "}
+                    <span style={{ color: theme.palette.red }}>Red</span>
+                  </DropdownItem>
                   <DropdownItem
                     style={{
                       color: theme.palette.red,
