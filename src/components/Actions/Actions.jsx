@@ -25,13 +25,15 @@ import {
   INIT,
 } from "context/List";
 
-const Actions = ({ currentMonday, firstMonday }) => {
+const Actions = ({ currentMonday, firstMonday, isRefresh, setIsRefresh }) => {
   return (
     <ListProvider storageKey={currentMonday}>
       <ActionsProvider
         storageKey="actions"
         currentMonday={currentMonday}
         firstMonday={firstMonday}
+        isRefresh={isRefresh}
+        setIsRefresh={setIsRefresh}
       >
         <ActionsElt />
       </ActionsProvider>

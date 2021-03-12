@@ -12,13 +12,15 @@ const ActionsProvider = ({
   storageKey,
   currentMonday,
   firstMonday,
+  isRefresh,
+  setIsRefresh,
   children,
 }) => {
   const [state, dispatch] = useReducer(reducer, {});
   const [actions, setActions] = useState({});
   const initRef = useRef(false);
 
-  // // sync with browser storage
+  // sync with browser storage
   useEffect(() => {
     if (initRef.current) {
       browser.storage.sync.set({ [storageKey]: state });
@@ -96,7 +98,8 @@ const ActionsProvider = ({
     dispatch({ type: INIT, payload: storage[storageKey] });
 
     initRef.current = true;
-  }, [actions, storageKey]);
+    setIsRefresh(false);
+  }, [actions, isRefresh, storageKey]);
 
   return (
     <ActionsContext.Provider value={[state, dispatch]}>

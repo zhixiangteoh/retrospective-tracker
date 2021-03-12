@@ -27,6 +27,7 @@ const firstMonday = getMondayDate(new Date("2/1/2021"));
 const Popup = () => {
   const [page, setPage] = useState("current");
   const [currentMonday, setCurrentMonday] = useState(thisMonday);
+  const [isRefresh, setIsRefresh] = useState(false);
 
   const renderPage = () => {
     switch (page) {
@@ -35,6 +36,7 @@ const Popup = () => {
           <Current
             currentMonday={currentMonday}
             setCurrentMonday={setCurrentMonday}
+            refreshActions={() => {}}
           />
         );
       case "previous":
@@ -43,6 +45,7 @@ const Popup = () => {
             currentMonday={currentMonday}
             // to change
             firstMonday={firstMonday}
+            refreshActions={setIsRefresh}
           />
         );
       case "actions":
@@ -51,6 +54,8 @@ const Popup = () => {
             currentMonday={currentMonday}
             // to change
             firstMonday={firstMonday}
+            isRefresh={isRefresh}
+            setIsRefresh={setIsRefresh}
           />
         );
       default:

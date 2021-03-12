@@ -6,7 +6,12 @@ import ListContainer from "components/ListContainer";
 import ListHeader from "components/ListHeader";
 import getDayDiff from "util/getDayDiff";
 
-const PreviousList = ({ setMenu, currentMonday, firstMonday }) => {
+const PreviousList = ({
+  setMenu,
+  currentMonday,
+  firstMonday,
+  refreshActions,
+}) => {
   const [dates, setDates] = useState([]);
 
   useEffect(() => {
@@ -42,6 +47,7 @@ const PreviousList = ({ setMenu, currentMonday, firstMonday }) => {
           setMenu={setMenu}
           active={activeInd === idx}
           setActive={(active) => setActiveInd(active ? null : idx)}
+          refreshActions={refreshActions}
         />
       );
     });
@@ -54,7 +60,7 @@ const PreviousList = ({ setMenu, currentMonday, firstMonday }) => {
   );
 };
 
-const PreviousElt = ({ header, date, active, setActive }) => {
+const PreviousElt = ({ header, date, active, setActive, refreshActions }) => {
   return (
     <div style={{ marginBottom: 4 }}>
       <ListHeader
@@ -69,7 +75,7 @@ const PreviousElt = ({ header, date, active, setActive }) => {
       />
       <div style={{ marginTop: 10, marginBottom: 10 }}>
         <Collapse open={active}>
-          <Previous key={date} date={date} />
+          <Previous key={date} date={date} refreshActions={refreshActions} />
         </Collapse>
       </div>
     </div>
