@@ -46,14 +46,23 @@ const ActionsElt = () => {
   const [actions, dispatchActions] = useContext(ActionsContext);
   const [tab, setTab] = useState("Y");
 
+  const setItems = (type, result) => {
+    const actionType = type === "Y" ? SET_YELLOW_ITEMS : SET_RED_ITEMS;
+    dispatchActions({ type: actionType, payload: result });
+  };
+
   return (
     <ListContainer header="Resolve these issues">
       <NavBar tab={tab} setTab={setTab} />
       {actions.yellowItems && actions.redItems ? (
         <Issues
-          type={tab}
+          tab={tab}
           items={tab === "Y" ? actions.yellowItems : actions.redItems}
-          setItems={tab === "Y" ? actions.yellowItems : actions.redItems}
+          setItems={
+            tab === "Y"
+              ? (items) => setItems("Y", items)
+              : (items) => setItems("R", items)
+          }
           CurrentContext={[current, dispatchCurrent]}
           ActionsContext={[actions, dispatchActions]}
         />
@@ -65,7 +74,7 @@ const ActionsElt = () => {
 };
 
 const Issues = withTheme(
-  ({ type, items, theme, CurrentContext, ActionsContext }) => {
+  ({ type, items, setItems, theme, CurrentContext, ActionsContext }) => {
     const [current, dispatchCurrent] = CurrentContext;
     const [actions, dispatchActions] = ActionsContext;
     const [hoverIdx, setHoverIdx] = useState(null);
@@ -94,16 +103,23 @@ const Issues = withTheme(
 
     const addItem = (type, item) => {
       setCurrentList(type, [item, ...getCurrentList(type)]);
-      handleDelete(item);
     };
 
-    const handleMove = (type, item) => {
+    const handleMove = (type, item, idx) => {
       addItem(type, item);
+      handleDelete(idx);
     };
 
-    const handleDelete = (item) => {
-      const actionType = type === "Y" ? REMOVE_YELLOW_ITEM : REMOVE_RED_ITEM;
-      dispatchActions({ type: actionType, payload: item });
+    const handleDelete = (idx) => {
+      // const actionType = type === "Y" ? REMOVE_YELLOW_ITEM : REMOVE_RED_ITEM;
+      // dispatchActions({ type: actionType, payload: item });
+
+      const result = Array.from(items);
+      result.splice(idx, 1);
+
+      setTimeout(() => {
+        setItems(result);
+      }, 50);
     };
 
     return (
@@ -147,17 +163,17 @@ const Issues = withTheme(
                     <MoreVertical size={20} />
                   </DropdownToggle>
                   <DropdownMenu right>
-                    <DropdownItem onClick={() => handleMove("G", item)}>
+                    <DropdownItem onClick={() => handleMove("G", item, idx)}>
                       Move to{" "}
                       <span style={{ color: theme.palette.green }}>Green</span>
                     </DropdownItem>
-                    <DropdownItem onClick={() => handleMove("Y", item)}>
+                    <DropdownItem onClick={() => handleMove("Y", item, idx)}>
                       Move to{" "}
                       <span style={{ color: theme.palette.yellow }}>
                         Yellow
                       </span>
                     </DropdownItem>
-                    <DropdownItem onClick={() => handleMove("R", item)}>
+                    <DropdownItem onClick={() => handleMove("R", item, idx)}>
                       Move to{" "}
                       <span style={{ color: theme.palette.red }}>Red</span>
                     </DropdownItem>
@@ -168,7 +184,7 @@ const Issues = withTheme(
                         justifyContent: "flex-start",
                         alignItems: "center",
                       }}
-                      onClick={() => handleDelete(item)}
+                      onClick={() => handleDelete(idx)}
                     >
                       <Trash size={14} style={{ marginRight: 4 }} /> Delete
                     </DropdownItem>
