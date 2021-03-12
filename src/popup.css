@@ -1,0 +1,8 @@
+.collapse:not(.show) {
+  display: none !important;
+}
+
+.highlight-text:hover {
+  color: #ee5253 !important;
+  text-decoration: underline;
+}

@@ -1,62 +1,60 @@
 import {
-  ADD_ITEM,
-  REMOVE_ITEM,
-  UPDATE_ITEM,
   SET_GREEN_ITEMS,
   SET_YELLOW_ITEMS,
   SET_RED_ITEMS,
+  MOVE_ITEM,
+  RESOLVE_ITEM,
   INIT,
 } from "./actions";
-import objectMap from "util/objectMap";
 
 const reducer = (state, { payload, type }) => {
   switch (type) {
-    case ADD_ITEM:
-      // always add to green list
-      return {
-        greenItems: [
-          {
-            id: Math.random()
-              .toString(16)
-              .substr(2),
-            body: payload,
-          },
-          ...state.greenItems,
-        ],
-        yellowItems: state.yellowItems,
-        redItems: state.redItems,
-      };
-    case REMOVE_ITEM:
-      return objectMap(state, (colorItems) => {
-        return colorItems.filter(({ id }) => id !== payload);
-      });
-    case UPDATE_ITEM:
-      return objectMap(state, (colorItems) => {
-        return colorItems.map((item) => {
-          if (item.id === payload.id) {
-            return { ...item, body: payload.body };
-          }
-
-          return item;
-        });
-      });
     case SET_GREEN_ITEMS:
       return {
+        ...state,
         greenItems: payload,
-        yellowItems: state.yellowItems,
-        redItems: state.redItems,
       };
     case SET_YELLOW_ITEMS:
       return {
-        greenItems: state.greenItems,
+        ...state,
         yellowItems: payload,
-        redItems: state.redItems,
       };
     case SET_RED_ITEMS:
       return {
-        greenItems: state.greenItems,
-        yellowItems: state.yellowItems,
+        ...state,
         redItems: payload,
+      };
+    case MOVE_ITEM:
+      let moved = { ...state.moved, [payload.id]: true };
+      return {
+        ...state,
+        redItems: state.redItems?.filter(
+          (item) =>
+            (!moved || !moved[item.id]) &&
+            (!state.resolved || !state.resolved[item.id])
+        ),
+        yellowItems: state.yellowItems?.filter(
+          (item) =>
+            (!moved || !moved[item.id]) &&
+            (!state.resolved || !state.resolved[item.id])
+        ),
+        moved,
+      };
+    case RESOLVE_ITEM:
+      let resolved = { ...state.resolved, [payload.id]: true };
+      return {
+        ...state,
+        redItems: state.redItems?.filter(
+          (item) =>
+            (!state.moved || !state.moved[item.id]) &&
+            (!resolved || !resolved[item.id])
+        ),
+        yellowItems: state.yellowItems?.filter(
+          (item) =>
+            (!state.moved || !state.moved[item.id]) &&
+            (!resolved || !resolved[item.id])
+        ),
+        resolved,
       };
     case INIT:
       return payload;
