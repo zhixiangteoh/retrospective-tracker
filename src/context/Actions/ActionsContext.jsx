@@ -1,7 +1,7 @@
-import React, { useReducer, useEffect, useState, useRef } from "react";
+import React, { useReducer, useEffect, useRef } from "react";
 import browser from "webextension-polyfill";
 
-import { ListProvider, INIT, reducer } from "context/List";
+import { INIT, reducer } from "context/List";
 import getMondayDate from "util/getMondayDate";
 import getDayDiff from "util/getDayDiff";
 
@@ -100,10 +100,6 @@ const ActionsProvider = ({
     }
     dispatch({ type: INIT, payload: { ...state, ...actionsList } });
   };
-
-  // useEffect(async () => {
-  //   await initActions(state);
-  // }, [currentMonday]);
 
   // initialize with yellow and red items from all previous lists
   useEffect(async () => {
