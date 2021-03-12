@@ -1,15 +1,45 @@
 const stubList = {
   greenItems: [
-    { id: "0", body: "0" },
-    { id: "1", body: "1" },
+    {
+      id: Math.random()
+        .toString(16)
+        .substr(2),
+      body: "0",
+    },
+    {
+      id: Math.random()
+        .toString(16)
+        .substr(2),
+      body: "1",
+    },
   ],
   yellowItems: [
-    { id: "2", body: "2" },
-    { id: "3", body: "3" },
+    {
+      id: Math.random()
+        .toString(16)
+        .substr(2),
+      body: "2",
+    },
+    {
+      id: Math.random()
+        .toString(16)
+        .substr(2),
+      body: "3",
+    },
   ],
   redItems: [
-    { id: "4", body: "4" },
-    { id: "5", body: "5" },
+    {
+      id: Math.random()
+        .toString(16)
+        .substr(2),
+      body: "4",
+    },
+    {
+      id: Math.random()
+        .toString(16)
+        .substr(2),
+      body: "5",
+    },
   ],
 };
 

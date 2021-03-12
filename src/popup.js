@@ -10,8 +10,8 @@ import Actions from "components/Actions";
 import { Nav, NavItem, NavLink } from "shards-react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
-import "./popup.css";
 
+import "./popup.css";
 import getMondayDate from "util/getMondayDate";
 
 Date.prototype.addDays = function(days) {

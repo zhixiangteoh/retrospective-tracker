@@ -12,39 +12,36 @@ import {
 import { MoreVertical, Trash } from "react-feather";
 
 import ListContainer from "../ListContainer/ListContainer";
+import { ListProvider, ListContext } from "context/List";
 import { ActionsProvider, ActionsContext } from "context/Actions";
 import {
   ADD_YELLOW_ITEM,
   ADD_RED_ITEM,
-  REMOVE_ITEM,
+  REMOVE_YELLOW_ITEM,
+  REMOVE_RED_ITEM,
+  SET_GREEN_ITEMS,
   SET_YELLOW_ITEMS,
   SET_RED_ITEMS,
   INIT,
 } from "context/List";
 
 const Actions = ({ currentMonday, firstMonday }) => {
-  // const [yellowItems, setYellowItems] = useState([
-  //   { id: "1", body: "asdfasdfasd" },
-  //   { id: "2", body: "asdfasdfasd" },
-  // ]);
-  // const [redItems, setRedItems] = useState([
-  //   { id: "1", body: "a;lkajds" },
-  //   { id: "2", body: ";klasdf" },
-  // ]);
-
   return (
-    <ActionsProvider
-      storageKey="actions"
-      currentMonday={currentMonday}
-      firstMonday={firstMonday}
-    >
-      <ActionElt />
-    </ActionsProvider>
+    <ListProvider storageKey={currentMonday}>
+      <ActionsProvider
+        storageKey="actions"
+        currentMonday={currentMonday}
+        firstMonday={firstMonday}
+      >
+        <ActionsElt />
+      </ActionsProvider>
+    </ListProvider>
   );
 };
 
-const ActionElt = () => {
-  const [actions, dispatch] = useContext(ActionsContext);
+const ActionsElt = () => {
+  const [current, dispatchCurrent] = useContext(ListContext);
+  const [actions, dispatchActions] = useContext(ActionsContext);
   const [tab, setTab] = useState("Y");
 
   return (
@@ -52,89 +49,137 @@ const ActionElt = () => {
       <NavBar tab={tab} setTab={setTab} />
       {actions.yellowItems && actions.redItems ? (
         <Issues
+          type={tab}
           items={tab === "Y" ? actions.yellowItems : actions.redItems}
           setItems={tab === "Y" ? actions.yellowItems : actions.redItems}
+          CurrentContext={[current, dispatchCurrent]}
+          ActionsContext={[actions, dispatchActions]}
         />
       ) : (
-        <p>Loading...</p>
+        <p align="center">Loading...</p>
       )}
     </ListContainer>
   );
 };
 
-const Issues = withTheme(({ items, theme }) => {
-  const [hoverIdx, setHoverIdx] = useState(null);
-  const [dropdownIdx, setDropdownIdx] = useState(null);
-  return (
-    <>
-      {items.map((item, idx) => (
-        <div
-          style={{
-            padding: 8 * 2,
-            margin: "0 0 8px 0",
-            boxShadow:
-              dropdownIdx === idx || hoverIdx === idx
-                ? "0px 0px 10px rgba(0, 0, 0, 0.1)"
-                : "0px 0px 2px rgba(0, 0, 0, 0.2)",
-            transition: "box-shadow 0.3s ease-in-out",
-            position: "relative",
-            background: "white",
-            whiteSpace: "pre-wrap",
-          }}
-          onMouseEnter={() => dropdownIdx === null && setHoverIdx(idx)}
-          onMouseLeave={() => dropdownIdx === null && setHoverIdx(null)}
-        >
-          {item.body}
-          {hoverIdx === idx && (
-            <div style={{ position: "absolute", top: 13, right: 8 }}>
-              <Dropdown
-                open={dropdownIdx === idx}
-                toggle={() => setDropdownIdx(dropdownIdx === idx ? null : idx)}
-                className="d-table"
-              >
-                <DropdownToggle
-                  outline
-                  pill
-                  theme="light"
-                  style={{
-                    padding: 4,
-                    border: 0,
-                  }}
+const Issues = withTheme(
+  ({ type, items, theme, CurrentContext, ActionsContext }) => {
+    const [current, dispatchCurrent] = CurrentContext;
+    const [actions, dispatchActions] = ActionsContext;
+    const [hoverIdx, setHoverIdx] = useState(null);
+    const [dropdownIdx, setDropdownIdx] = useState(null);
+
+    const getCurrentList = (id) => {
+      if (id === "G") {
+        return current.greenItems;
+      }
+      if (id === "Y") {
+        return current.yellowItems;
+      } else {
+        return current.redItems;
+      }
+    };
+
+    const setCurrentList = (id, items) => {
+      if (id === "G") {
+        dispatchCurrent({ type: SET_GREEN_ITEMS, payload: items });
+      } else if (id === "Y") {
+        dispatchCurrent({ type: SET_YELLOW_ITEMS, payload: items });
+      } else {
+        dispatchCurrent({ type: SET_RED_ITEMS, payload: items });
+      }
+    };
+
+    const addItem = (type, item) => {
+      setCurrentList(type, [item, ...getCurrentList(type)]);
+      handleDelete(item);
+    };
+
+    const handleMove = (type, item) => {
+      addItem(type, item);
+    };
+
+    const handleDelete = (item) => {
+      const actionType = type === "Y" ? REMOVE_YELLOW_ITEM : REMOVE_RED_ITEM;
+      dispatchActions({ type: actionType, payload: item });
+    };
+
+    return (
+      <>
+        {items.map((item, idx) => (
+          <div
+            style={{
+              padding: 8 * 2,
+              margin: "0 0 8px 0",
+              boxShadow:
+                dropdownIdx === idx || hoverIdx === idx
+                  ? "0px 0px 10px rgba(0, 0, 0, 0.1)"
+                  : "0px 0px 2px rgba(0, 0, 0, 0.2)",
+              transition: "box-shadow 0.3s ease-in-out",
+              position: "relative",
+              background: "white",
+              whiteSpace: "pre-wrap",
+            }}
+            onMouseEnter={() => dropdownIdx === null && setHoverIdx(idx)}
+            onMouseLeave={() => dropdownIdx === null && setHoverIdx(null)}
+          >
+            {item.body}
+            {hoverIdx === idx && (
+              <div style={{ position: "absolute", top: 13, right: 8 }}>
+                <Dropdown
+                  open={dropdownIdx === idx}
+                  toggle={() =>
+                    setDropdownIdx(dropdownIdx === idx ? null : idx)
+                  }
+                  className="d-table"
                 >
-                  <MoreVertical size={20} />
-                </DropdownToggle>
-                <DropdownMenu right>
-                  <DropdownItem>
-                    Move to{" "}
-                    <span style={{ color: theme.palette.green }}>Green</span>
-                  </DropdownItem>
-                  <DropdownItem>
-                    Move to{" "}
-                    <span style={{ color: theme.palette.yellow }}>Yellow</span>
-                  </DropdownItem>
-                  <DropdownItem>
-                    Move to{" "}
-                    <span style={{ color: theme.palette.red }}>Red</span>
-                  </DropdownItem>
-                  <DropdownItem
+                  <DropdownToggle
+                    outline
+                    pill
+                    theme="light"
                     style={{
-                      color: theme.palette.red,
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
+                      padding: 4,
+                      border: 0,
                     }}
                   >
-                    <Trash size={14} style={{ marginRight: 4 }} /> Delete
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            </div>
-          )}
-        </div>
-      ))}
-    </>
-  );
-});
+                    <MoreVertical size={20} />
+                  </DropdownToggle>
+                  <DropdownMenu right>
+                    <DropdownItem onClick={() => handleMove("G", item)}>
+                      Move to{" "}
+                      <span style={{ color: theme.palette.green }}>Green</span>
+                    </DropdownItem>
+                    <DropdownItem onClick={() => handleMove("Y", item)}>
+                      Move to{" "}
+                      <span style={{ color: theme.palette.yellow }}>
+                        Yellow
+                      </span>
+                    </DropdownItem>
+                    <DropdownItem onClick={() => handleMove("R", item)}>
+                      Move to{" "}
+                      <span style={{ color: theme.palette.red }}>Red</span>
+                    </DropdownItem>
+                    <DropdownItem
+                      style={{
+                        color: theme.palette.red,
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        alignItems: "center",
+                      }}
+                      onClick={() => handleDelete(item)}
+                    >
+                      <Trash size={14} style={{ marginRight: 4 }} /> Delete
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
+            )}
+          </div>
+        ))}
+      </>
+    );
+  }
+);
 
 const NavBar = withTheme(({ tab, setTab, theme }) => (
   <Nav tabs fill style={{ marginBottom: 16 }}>

@@ -1,13 +1,7 @@
 import React, { useReducer, useEffect, useState, useRef } from "react";
 import browser from "webextension-polyfill";
 
-import {
-  INIT,
-  ADD_GREEN_ITEM,
-  ADD_YELLOW_ITEM,
-  ADD_RED_ITEM,
-  reducer,
-} from "context/List";
+import { ListProvider, INIT, reducer } from "context/List";
 import getMondayDate from "util/getMondayDate";
 import getDayDiff from "util/getDayDiff";
 

@@ -4,7 +4,9 @@ import {
   UPDATE_ITEM,
   ADD_GREEN_ITEM,
   ADD_YELLOW_ITEM,
+  REMOVE_YELLOW_ITEM,
   ADD_RED_ITEM,
+  REMOVE_RED_ITEM,
   SET_GREEN_ITEMS,
   SET_YELLOW_ITEMS,
   SET_RED_ITEMS,
@@ -71,6 +73,12 @@ const reducer = (state, { payload, type }) => {
         ],
         redItems: state.redItems,
       };
+    case REMOVE_YELLOW_ITEM:
+      return {
+        greenItems: state.greenItems,
+        yellowItems: state.redItems.filter(({ id }) => id !== payload.id),
+        redItems: state.yellowItems,
+      };
     case ADD_RED_ITEM:
       return {
         greenItems: state.greenItems,
@@ -84,6 +92,12 @@ const reducer = (state, { payload, type }) => {
           },
           ...state.redItems,
         ],
+      };
+    case REMOVE_RED_ITEM:
+      return {
+        greenItems: state.greenItems,
+        yellowItems: state.yellowItems,
+        redItems: state.redItems.filter(({ id }) => id !== payload.id),
       };
     case SET_GREEN_ITEMS:
       return {
