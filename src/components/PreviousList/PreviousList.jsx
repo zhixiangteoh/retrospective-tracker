@@ -6,17 +6,20 @@ import ListContainer from "components/ListContainer";
 import ListHeader from "components/ListHeader";
 import getDayDiff from "util/getDayDiff";
 
-const PreviousList = ({ setMenu, currentMonday, firstMonday }) => {
+const PreviousList = ({
+  setMenu,
+  currentMonday,
+  firstMonday,
+  refreshActions,
+}) => {
   const [dates, setDates] = useState([]);
 
   useEffect(() => {
-    console.log(getDates());
     setDates(getDates());
   }, []);
 
   const [activeInd, setActiveInd] = useState(null);
 
-  // for test
   const getDates = () => {
     let daySpan = getDayDiff(currentMonday, firstMonday);
     let daysArr = [];
@@ -44,6 +47,7 @@ const PreviousList = ({ setMenu, currentMonday, firstMonday }) => {
           setMenu={setMenu}
           active={activeInd === idx}
           setActive={(active) => setActiveInd(active ? null : idx)}
+          refreshActions={refreshActions}
         />
       );
     });
@@ -56,7 +60,7 @@ const PreviousList = ({ setMenu, currentMonday, firstMonday }) => {
   );
 };
 
-const PreviousElt = ({ header, date, setMenu, active, setActive }) => {
+const PreviousElt = ({ header, date, active, setActive, refreshActions }) => {
   return (
     <div style={{ marginBottom: 4 }}>
       <ListHeader
@@ -71,7 +75,7 @@ const PreviousElt = ({ header, date, setMenu, active, setActive }) => {
       />
       <div style={{ marginTop: 10, marginBottom: 10 }}>
         <Collapse open={active}>
-          <Previous key={date} setMenu={setMenu} date={date} />
+          <Previous key={date} date={date} refreshActions={refreshActions} />
         </Collapse>
       </div>
     </div>

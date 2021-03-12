@@ -15,7 +15,12 @@ const Save = (props) => {
   );
 };
 
-const Current = ({ setMenu, currentMonday, setCurrentMonday }) => {
+const Current = ({
+  setMenu,
+  currentMonday,
+  setCurrentMonday,
+  refreshActions,
+}) => {
   const [key, setKey] = useState(currentMonday);
 
   const handleSave = () => {
@@ -48,7 +53,7 @@ const Current = ({ setMenu, currentMonday, setCurrentMonday }) => {
           </div>
           <Save onClick={handleSave} />
         </div>
-        <List />
+        <List refreshActions={refreshActions} />
       </ListContainer>
     </ListProvider>
   );

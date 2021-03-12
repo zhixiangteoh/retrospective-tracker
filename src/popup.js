@@ -10,8 +10,8 @@ import Actions from "components/Actions";
 import { Nav, NavItem, NavLink } from "shards-react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
-import "./popup.css";
 
+import "./popup.css";
 import getMondayDate from "util/getMondayDate";
 
 Date.prototype.addDays = function(days) {
@@ -27,6 +27,7 @@ const firstMonday = getMondayDate(new Date("2/1/2021"));
 const Popup = () => {
   const [page, setPage] = useState("current");
   const [currentMonday, setCurrentMonday] = useState(thisMonday);
+  const [isRefresh, setIsRefresh] = useState(false);
 
   const renderPage = () => {
     switch (page) {
@@ -35,6 +36,7 @@ const Popup = () => {
           <Current
             currentMonday={currentMonday}
             setCurrentMonday={setCurrentMonday}
+            refreshActions={() => {}}
           />
         );
       case "previous":
@@ -43,10 +45,19 @@ const Popup = () => {
             currentMonday={currentMonday}
             // to change
             firstMonday={firstMonday}
+            refreshActions={setIsRefresh}
           />
         );
       case "actions":
-        return <Actions />;
+        return (
+          <Actions
+            currentMonday={currentMonday}
+            // to change
+            firstMonday={firstMonday}
+            isRefresh={isRefresh}
+            setIsRefresh={setIsRefresh}
+          />
+        );
       default:
         return null;
     }

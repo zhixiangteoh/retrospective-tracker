@@ -7,13 +7,11 @@ import { Edit2, Inbox, Minus, Plus } from "react-feather";
 import Box from "components/Box";
 import {
   ListContext,
-  ADD_ITEM,
-  REMOVE_ITEM,
-  UPDATE_ITEM,
   SET_GREEN_ITEMS,
   SET_YELLOW_ITEMS,
   SET_RED_ITEMS,
 } from "context/List";
+import getUID from "../../util/getUID";
 
 const getItemStyle = (isDragging, draggableStyle, isHovered) => ({
   // some basic styles to make the items look a bit nicer
@@ -56,7 +54,7 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-const List = ({ theme }) => {
+const List = ({ theme, refreshActions }) => {
   const [list, dispatch] = useContext(ListContext);
   const [hoveredList, setHoveredList] = useState(null);
 
@@ -119,16 +117,17 @@ const List = ({ theme }) => {
     }
   };
 
-  const addItem = (type) =>
+  const addItem = (type) => {
     setList(type, [
       {
-        id: Math.random()
-          .toString(16)
-          .substr(2),
+        id: getUID(),
         body: "",
       },
       ...getList(type),
     ]);
+
+    refreshActions(true);
+  };
 
   return (
     <Box display="flex" flexDirection="column" height="100%">
@@ -149,6 +148,7 @@ const List = ({ theme }) => {
               id="G"
               items={list.greenItems}
               setItems={(items) => setList("G", items)}
+              refreshActions={refreshActions}
             />
           ) : (
             <p align="center">Loading...</p>
@@ -171,6 +171,7 @@ const List = ({ theme }) => {
               id="Y"
               items={list.yellowItems}
               setItems={(items) => setList("Y", items)}
+              refreshActions={refreshActions}
             />
           ) : (
             <p align="center">Loading...</p>
@@ -193,6 +194,7 @@ const List = ({ theme }) => {
               id="R"
               items={list.redItems}
               setItems={(items) => setList("R", items)}
+              refreshActions={refreshActions}
             />
           ) : (
             <p align="center">Loading...</p>
@@ -243,7 +245,7 @@ const Title = ({ color, addItem, children, showAddButton }) => {
   );
 };
 
-const DroppableList = ({ id, items, setItems }) => {
+const DroppableList = ({ id, items, setItems, refreshActions }) => {
   const [hoverIndex, setHoverIndex] = useState(null);
   const [editIndex, setEditIndex] = useState(null);
   const [editValue, setEditValue] = useState("");
@@ -271,6 +273,8 @@ const DroppableList = ({ id, items, setItems }) => {
     setItems(result);
     setEditValue("");
     setEditIndex(null);
+
+    refreshActions(true);
   };
 
   const deleteItem = () => {
@@ -283,6 +287,8 @@ const DroppableList = ({ id, items, setItems }) => {
     setTimeout(() => {
       setItems(result);
     }, 50);
+
+    refreshActions(true);
   };
 
   useEffect(() => {
