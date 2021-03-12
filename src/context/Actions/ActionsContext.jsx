@@ -16,8 +16,12 @@ const ActionsProvider = ({
   setIsRefresh,
   children,
 }) => {
-  const [state, dispatch] = useReducer(reducer, {});
-  const [actions, setActions] = useState({});
+  const [state, dispatch] = useReducer(reducer, {
+    yellowItems: [],
+    redItems: [],
+    moved: {},
+    resolved: {},
+  });
   const initRef = useRef(false);
 
   // sync with browser storage
@@ -57,49 +61,59 @@ const ActionsProvider = ({
   };
 
   const aggregatePreviousItems = (
-    { greenItems, yellowItems, redItems },
+    state,
+    { yellowItems, redItems },
     actionsList
   ) => {
     let newActionsList = {};
-    newActionsList.greenItems = actionsList.greenItems.concat(greenItems);
-    newActionsList.yellowItems = actionsList.yellowItems.concat(yellowItems);
-    newActionsList.redItems = actionsList.redItems.concat(redItems);
+    newActionsList.yellowItems = actionsList.yellowItems.concat(
+      yellowItems.filter(
+        (item) =>
+          (!state.moved || !state.moved[item.id]) &&
+          (!state.resolved || !state?.resolved[item.id])
+      )
+    );
+    newActionsList.redItems = actionsList.redItems.concat(
+      redItems.filter(
+        (item) =>
+          (!state.moved || !state.moved[item.id]) &&
+          (!state.resolved || !state?.resolved[item.id])
+      )
+    );
 
     return newActionsList;
   };
 
-  const initActions = async () => {
+  const initActions = async (state) => {
     const previousKeys = getPreviousKeys();
 
-    let actionsList = { greenItems: [], yellowItems: [], redItems: [] };
+    let actionsList = { yellowItems: [], redItems: [] };
 
     let i = 0;
     while (i < previousKeys.length) {
       const key = previousKeys[i];
       const storage = await browser.storage.sync.get({ [key]: 0 });
       const list = storage[key];
-      actionsList = aggregatePreviousItems(list, actionsList);
+      actionsList = aggregatePreviousItems(state, list, actionsList);
 
       i++;
     }
-
-    setActions(actionsList);
+    dispatch({ type: INIT, payload: { ...state, ...actionsList } });
   };
 
-  useEffect(async () => {
-    await initActions();
-  }, [currentMonday]);
+  // useEffect(async () => {
+  //   await initActions(state);
+  // }, [currentMonday]);
 
   // initialize with yellow and red items from all previous lists
   useEffect(async () => {
-    const storage = await browser.storage.sync.set({
-      [storageKey]: actions,
+    const storage = await browser.storage.sync.get({
+      [storageKey]: state,
     });
-    dispatch({ type: INIT, payload: storage[storageKey] });
-
+    initActions(storage[storageKey]);
     initRef.current = true;
     setIsRefresh(false);
-  }, [actions, isRefresh, storageKey]);
+  }, [isRefresh, storageKey]);
 
   return (
     <ActionsContext.Provider value={[state, dispatch]}>

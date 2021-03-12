@@ -22,8 +22,11 @@ import {
   SET_GREEN_ITEMS,
   SET_YELLOW_ITEMS,
   SET_RED_ITEMS,
+  MOVE_ITEM,
+  RESOLVE_ITEM,
   INIT,
 } from "context/List";
+import getUID from "../../util/getUID";
 
 const Actions = ({ currentMonday, firstMonday, isRefresh, setIsRefresh }) => {
   return (
@@ -105,95 +108,95 @@ const Issues = withTheme(
       setCurrentList(type, [item, ...getCurrentList(type)]);
     };
 
-    const handleMove = (type, item, idx) => {
-      addItem(type, item);
-      handleDelete(idx);
+    const handleMove = (type, item) => {
+      dispatchActions({ type: MOVE_ITEM, payload: item });
+      addItem(type, { id: getUID(), body: item.body });
     };
 
-    const handleDelete = (idx) => {
-      // const actionType = type === "Y" ? REMOVE_YELLOW_ITEM : REMOVE_RED_ITEM;
-      // dispatchActions({ type: actionType, payload: item });
-
-      const result = Array.from(items);
-      result.splice(idx, 1);
-
-      setTimeout(() => {
-        setItems(result);
-      }, 50);
+    const handleDelete = (item) => {
+      dispatchActions({ type: RESOLVE_ITEM, payload: item });
     };
 
     return (
       <>
-        {items.map((item, idx) => (
-          <div
-            style={{
-              padding: 8 * 2,
-              margin: "0 0 8px 0",
-              boxShadow:
-                dropdownIdx === idx || hoverIdx === idx
-                  ? "0px 0px 10px rgba(0, 0, 0, 0.1)"
-                  : "0px 0px 2px rgba(0, 0, 0, 0.2)",
-              transition: "box-shadow 0.3s ease-in-out",
-              position: "relative",
-              background: "white",
-              whiteSpace: "pre-wrap",
-            }}
-            onMouseEnter={() => dropdownIdx === null && setHoverIdx(idx)}
-            onMouseLeave={() => dropdownIdx === null && setHoverIdx(null)}
-          >
-            {item.body}
-            {hoverIdx === idx && (
-              <div style={{ position: "absolute", top: 13, right: 8 }}>
-                <Dropdown
-                  open={dropdownIdx === idx}
-                  toggle={() =>
-                    setDropdownIdx(dropdownIdx === idx ? null : idx)
-                  }
-                  className="d-table"
-                >
-                  <DropdownToggle
-                    outline
-                    pill
-                    theme="light"
-                    style={{
-                      padding: 4,
-                      border: 0,
-                    }}
+        {items.length === 0 ? (
+          <h6 className="text-center" style={{ color: "#CCC" }}>
+            You're all caught up!
+          </h6>
+        ) : (
+          items.map((item, idx) => (
+            <div
+              style={{
+                padding: 8 * 2,
+                margin: "0 0 8px 0",
+                boxShadow:
+                  dropdownIdx === idx || hoverIdx === idx
+                    ? "0px 0px 10px rgba(0, 0, 0, 0.1)"
+                    : "0px 0px 2px rgba(0, 0, 0, 0.2)",
+                transition: "box-shadow 0.3s ease-in-out",
+                position: "relative",
+                background: "white",
+                whiteSpace: "pre-wrap",
+              }}
+              onMouseEnter={() => dropdownIdx === null && setHoverIdx(idx)}
+              onMouseLeave={() => dropdownIdx === null && setHoverIdx(null)}
+            >
+              {item.body}
+              {hoverIdx === idx && (
+                <div style={{ position: "absolute", top: 13, right: 8 }}>
+                  <Dropdown
+                    open={dropdownIdx === idx}
+                    toggle={() =>
+                      setDropdownIdx(dropdownIdx === idx ? null : idx)
+                    }
+                    className="d-table"
                   >
-                    <MoreVertical size={20} />
-                  </DropdownToggle>
-                  <DropdownMenu right>
-                    <DropdownItem onClick={() => handleMove("G", item, idx)}>
-                      Move to{" "}
-                      <span style={{ color: theme.palette.green }}>Green</span>
-                    </DropdownItem>
-                    <DropdownItem onClick={() => handleMove("Y", item, idx)}>
-                      Move to{" "}
-                      <span style={{ color: theme.palette.yellow }}>
-                        Yellow
-                      </span>
-                    </DropdownItem>
-                    <DropdownItem onClick={() => handleMove("R", item, idx)}>
-                      Move to{" "}
-                      <span style={{ color: theme.palette.red }}>Red</span>
-                    </DropdownItem>
-                    <DropdownItem
+                    <DropdownToggle
+                      outline
+                      pill
+                      theme="light"
                       style={{
-                        color: theme.palette.red,
-                        display: "flex",
-                        justifyContent: "flex-start",
-                        alignItems: "center",
+                        padding: 4,
+                        border: 0,
                       }}
-                      onClick={() => handleDelete(idx)}
                     >
-                      <Trash size={14} style={{ marginRight: 4 }} /> Delete
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
-              </div>
-            )}
-          </div>
-        ))}
+                      <MoreVertical size={20} />
+                    </DropdownToggle>
+                    <DropdownMenu right>
+                      <DropdownItem onClick={() => handleMove("G", item)}>
+                        Move to{" "}
+                        <span style={{ color: theme.palette.green }}>
+                          Green
+                        </span>
+                      </DropdownItem>
+                      <DropdownItem onClick={() => handleMove("Y", item)}>
+                        Move to{" "}
+                        <span style={{ color: theme.palette.yellow }}>
+                          Yellow
+                        </span>
+                      </DropdownItem>
+                      <DropdownItem onClick={() => handleMove("R", item)}>
+                        Move to{" "}
+                        <span style={{ color: theme.palette.red }}>Red</span>
+                      </DropdownItem>
+                      <DropdownItem
+                        style={{
+                          color: theme.palette.red,
+                          display: "flex",
+                          justifyContent: "flex-start",
+                          alignItems: "center",
+                        }}
+                        onClick={() => handleDelete(item)}
+                      >
+                        <Trash size={14} style={{ marginRight: 4 }} /> Delete
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                </div>
+              )}
+            </div>
+          ))
+        )}
       </>
     );
   }

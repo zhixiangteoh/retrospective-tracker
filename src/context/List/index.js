@@ -1,16 +1,10 @@
 import { ListProvider, ListContext } from "./ListContext";
 import {
-  ADD_ITEM,
-  REMOVE_ITEM,
-  UPDATE_ITEM,
-  ADD_GREEN_ITEM,
-  ADD_YELLOW_ITEM,
-  REMOVE_YELLOW_ITEM,
-  ADD_RED_ITEM,
-  REMOVE_RED_ITEM,
   SET_GREEN_ITEMS,
   SET_YELLOW_ITEMS,
   SET_RED_ITEMS,
+  MOVE_ITEM,
+  RESOLVE_ITEM,
   INIT,
 } from "./actions";
 import reducer from "./reducer";
@@ -18,17 +12,11 @@ import reducer from "./reducer";
 export {
   ListProvider,
   ListContext,
-  ADD_ITEM,
-  REMOVE_ITEM,
-  UPDATE_ITEM,
-  ADD_GREEN_ITEM,
-  ADD_YELLOW_ITEM,
-  REMOVE_YELLOW_ITEM,
-  ADD_RED_ITEM,
-  REMOVE_RED_ITEM,
   SET_GREEN_ITEMS,
   SET_YELLOW_ITEMS,
   SET_RED_ITEMS,
+  MOVE_ITEM,
+  RESOLVE_ITEM,
   INIT,
   reducer,
 };

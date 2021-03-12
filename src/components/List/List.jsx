@@ -7,13 +7,11 @@ import { Edit2, Inbox, Minus, Plus } from "react-feather";
 import Box from "components/Box";
 import {
   ListContext,
-  ADD_ITEM,
-  REMOVE_ITEM,
-  UPDATE_ITEM,
   SET_GREEN_ITEMS,
   SET_YELLOW_ITEMS,
   SET_RED_ITEMS,
 } from "context/List";
+import getUID from "../../util/getUID";
 
 const getItemStyle = (isDragging, draggableStyle, isHovered) => ({
   // some basic styles to make the items look a bit nicer
@@ -122,9 +120,7 @@ const List = ({ theme, refreshActions }) => {
   const addItem = (type) => {
     setList(type, [
       {
-        id: Math.random()
-          .toString(16)
-          .substr(2),
+        id: getUID(),
         body: "",
       },
       ...getList(type),
