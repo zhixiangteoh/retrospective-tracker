@@ -1,5 +1,5 @@
 import "libs/polyfills";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { ThemeProvider } from "styled-components";
 import defaultTheme from "themes/default";
@@ -14,14 +14,20 @@ import "./popup.css";
 
 import getMondayDate from "util/getMondayDate";
 
+import { DatePicker } from "react-rainbow-components";
+
 Date.prototype.addDays = function(days) {
   var date = new Date(this.valueOf());
   date.setDate(date.getDate() + days);
   return date;
 };
 
+const containerStyles = {
+  maxWidth: 400,
+};
+
 const thisMonday = getMondayDate(new Date());
-// to change
+
 const firstMonday = getMondayDate(new Date("2/1/2021"));
 
 const Popup = () => {
@@ -51,6 +57,40 @@ const Popup = () => {
         return null;
     }
   };
+
+  const [initialDate, setInitialDate] = useState(null);
+
+  useEffect(async () => {
+    let retroDate = await browser.storage.sync.get("retroDate");
+    setInitialDate(retroDate);
+  }, [initialDate]);
+
+  const updateDateStorage = ({ startDate }) => {
+    // write it to a file
+    browser.storage.sync.set({
+      retroDate: startDate,
+    });
+
+    setInitialDate(startDate);
+  };
+
+  if (!initialDate) {
+    return (
+      <div
+        className="rainbow-align-content_center rainbow-m-vertical_large rainbow-p-horizontal_small rainbow-m_auto"
+        style={containerStyles}
+      >
+        <DatePicker
+          required
+          error="Select a date is Required"
+          placeholder="Select a date"
+          value={initialDate}
+          label="Pick the start day of the hackathon"
+          onChange={(value) => updateDateStorage({ startDate: value })}
+        />
+      </div>
+    );
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
