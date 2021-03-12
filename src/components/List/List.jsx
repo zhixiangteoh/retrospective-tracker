@@ -1,28 +1,17 @@
 import React, { useState, useContext, useRef, useEffect } from "react";
 import { withTheme } from "styled-components";
-import {
-  InputGroup,
-  InputGroupText,
-  InputGroupAddon,
-  FormTextarea,
-  FormInput,
-  Button,
-  Fade,
-  H1,
-} from "shards-react";
+import { FormTextarea, Button } from "shards-react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Edit2, Inbox, Minus, Plus } from "react-feather";
 
 import Box from "components/Box";
 import {
   ListContext,
-  ADD_ITEM,
-  REMOVE_ITEM,
-  UPDATE_ITEM,
   SET_GREEN_ITEMS,
   SET_YELLOW_ITEMS,
   SET_RED_ITEMS,
 } from "context/List";
+import getUID from "../../util/getUID";
 
 const getItemStyle = (isDragging, draggableStyle, isHovered) => ({
   // some basic styles to make the items look a bit nicer
@@ -65,8 +54,9 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-const List = ({ theme }) => {
+const List = ({ theme, refreshActions }) => {
   const [list, dispatch] = useContext(ListContext);
+  const [hoveredList, setHoveredList] = useState(null);
 
   const move = (source, destination, droppableSource, droppableDestination) => {
     const sourceClone = Array.from(source);
@@ -127,100 +117,135 @@ const List = ({ theme }) => {
     }
   };
 
-  const addItem = (type) =>
+  const addItem = (type) => {
     setList(type, [
       {
-        id: Math.random()
-          .toString(16)
-          .substr(2),
+        id: getUID(),
         body: "",
       },
       ...getList(type),
     ]);
 
+    refreshActions(true);
+  };
+
   return (
     <Box display="flex" flexDirection="column" height="100%">
       <DragDropContext onDragEnd={onDragEnd}>
-        <Title color={theme.palette.green} addItem={() => addItem("G")}>
-          Green
-        </Title>
-        {list.greenItems ? (
-          <DroppableList
-            id="G"
-            items={list.greenItems}
-            setItems={(items) => setList("G", items)}
-          />
-        ) : (
-          <p align="center">Loading...</p>
-        )}
+        <div
+          onMouseLeave={() => setHoveredList(null)}
+          onMouseEnter={() => setHoveredList("G")}
+        >
+          <Title
+            color={theme.palette.green}
+            addItem={() => addItem("G")}
+            showAddButton={hoveredList === "G"}
+          >
+            Green
+          </Title>
+          {list.greenItems ? (
+            <DroppableList
+              id="G"
+              items={list.greenItems}
+              setItems={(items) => setList("G", items)}
+              refreshActions={refreshActions}
+            />
+          ) : (
+            <p align="center">Loading...</p>
+          )}
+        </div>
 
-        <Title color={theme.palette.yellow} addItem={() => addItem("Y")}>
-          Yellow
-        </Title>
-        {list.greenItems ? (
-          <DroppableList
-            id="Y"
-            items={list.yellowItems}
-            setItems={(items) => setList("Y", items)}
-          />
-        ) : (
-          <p align="center">Loading...</p>
-        )}
+        <div
+          onMouseLeave={() => setHoveredList(null)}
+          onMouseEnter={() => setHoveredList("Y")}
+        >
+          <Title
+            color={theme.palette.yellow}
+            addItem={() => addItem("Y")}
+            showAddButton={hoveredList === "Y"}
+          >
+            Yellow
+          </Title>
+          {list.greenItems ? (
+            <DroppableList
+              id="Y"
+              items={list.yellowItems}
+              setItems={(items) => setList("Y", items)}
+              refreshActions={refreshActions}
+            />
+          ) : (
+            <p align="center">Loading...</p>
+          )}
+        </div>
 
-        <Title color={theme.palette.red} addItem={() => addItem("R")}>
-          Red
-        </Title>
-        {list.greenItems ? (
-          <DroppableList
-            id="R"
-            items={list.redItems}
-            setItems={(items) => setList("R", items)}
-          />
-        ) : (
-          <p align="center">Loading...</p>
-        )}
+        <div
+          onMouseLeave={() => setHoveredList(null)}
+          onMouseEnter={() => setHoveredList("R")}
+        >
+          <Title
+            color={theme.palette.red}
+            addItem={() => addItem("R")}
+            showAddButton={hoveredList === "R"}
+          >
+            Red
+          </Title>
+          {list.greenItems ? (
+            <DroppableList
+              id="R"
+              items={list.redItems}
+              setItems={(items) => setList("R", items)}
+              refreshActions={refreshActions}
+            />
+          ) : (
+            <p align="center">Loading...</p>
+          )}
+        </div>
       </DragDropContext>
     </Box>
   );
 };
 
-const Title = ({ color, addItem, children }) => (
-  <>
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginTop: 16,
-        marginBottom: 4,
-      }}
-    >
-      <h4 style={{ color, margin: 0 }}>{children}</h4>
-      <Button
-        onClick={addItem}
-        outline
-        pill
-        style={{
-          padding: 0,
-        }}
-      >
-        <Plus size={18} />
-      </Button>
-    </div>
-    <div>
+const Title = ({ color, addItem, children, showAddButton }) => {
+  return (
+    <>
       <div
         style={{
-          height: 1,
-          width: "100%",
-          background: "#CCC",
-          marginBottom: 8,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginTop: 4,
+          marginBottom: 4,
         }}
-      />
-    </div>
-  </>
-);
+      >
+        <h5 style={{ color, margin: 0 }}>{children}</h5>
+        {showAddButton && (
+          <Button
+            onClick={addItem}
+            outline
+            pill
+            style={{
+              padding: 0,
+            }}
+          >
+            <Plus size={18} />
+          </Button>
+        )}
+      </div>
+      <div>
+        <div
+          style={{
+            height: 1,
+            width: "100%",
+            background: "#CCC",
+            marginBottom: 8,
+          }}
+        />
+      </div>
+    </>
+  );
+};
 
-const DroppableList = ({ id, items, setItems }) => {
+const DroppableList = ({ id, items, setItems, refreshActions }) => {
   const [hoverIndex, setHoverIndex] = useState(null);
   const [editIndex, setEditIndex] = useState(null);
   const [editValue, setEditValue] = useState("");
@@ -248,6 +273,8 @@ const DroppableList = ({ id, items, setItems }) => {
     setItems(result);
     setEditValue("");
     setEditIndex(null);
+
+    refreshActions(true);
   };
 
   const deleteItem = () => {
@@ -260,6 +287,8 @@ const DroppableList = ({ id, items, setItems }) => {
     setTimeout(() => {
       setItems(result);
     }, 50);
+
+    refreshActions(true);
   };
 
   useEffect(() => {
