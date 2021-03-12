@@ -1,1 +1,13 @@
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 630 630"><defs><style>.cls-1{fill:url(#linear-gradient);}.cls-2{fill:url(#linear-gradient-2);}.cls-3{fill:url(#linear-gradient-3);}</style><linearGradient id="linear-gradient" x1="930.45" y1="866.68" x2="665.78" y2="607.55" gradientTransform="translate(-257 1278) rotate(-90)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#7fd957"/><stop offset="0.04" stop-color="#9fda57"/><stop offset="0.09" stop-color="#bcdb58"/><stop offset="0.14" stop-color="#d5dc58"/><stop offset="0.2" stop-color="#e8dd59"/><stop offset="0.27" stop-color="#f5de59"/><stop offset="0.36" stop-color="#fdde59"/><stop offset="0.53" stop-color="#ffde59"/><stop offset="0.63" stop-color="#ffdb59"/><stop offset="0.71" stop-color="#fed059"/><stop offset="0.78" stop-color="#fdbf59"/><stop offset="0.85" stop-color="#fba658"/><stop offset="0.92" stop-color="#f88658"/><stop offset="0.99" stop-color="#f66057"/><stop offset="1" stop-color="#f55857"/></linearGradient><linearGradient id="linear-gradient-2" x1="285.38" y1="345.73" x2="14.06" y2="614.83" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ffde59"/><stop offset="0.29" stop-color="#ffae58"/><stop offset="0.61" stop-color="#ff7f58"/><stop offset="0.86" stop-color="#ff6257"/><stop offset="1" stop-color="#ff5757"/></linearGradient><linearGradient id="linear-gradient-3" x1="345.97" y1="280.15" x2="613.96" y2="19.91" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ffde59"/><stop offset="0.26" stop-color="#d6dc58"/><stop offset="0.59" stop-color="#a7db58"/><stop offset="0.85" stop-color="#89d957"/><stop offset="1" stop-color="#7ed957"/></linearGradient></defs><rect class="cls-1" x="330.5" y="330.5" width="299" height="299"/><path d="M947,588V886H649V588H947m1-1H648V887H948V587Z" transform="translate(-318 -257)"/><rect class="cls-2" x="0.5" y="330.5" width="299" height="299"/><path d="M617,588V886H319V588H617m1-1H318V887H618V587Z" transform="translate(-318 -257)"/><rect class="cls-3" x="330.5" y="0.5" width="299" height="299"/><path d="M947,258V556H649V258H947m1-1H648V557H948V257Z" transform="translate(-318 -257)"/></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 630 630" style="enable-background:new 0 0 630 630;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#F7B731;}
+	.st1{fill:#EE5253;}
+	.st2{fill:#20BF6B;}
+</style>
+<rect x="330.5" y="330.5" class="st0" width="299" height="299"/>
+<rect x="0.5" y="330.5" class="st1" width="299" height="299"/>
+<rect x="330.5" y="0.5" class="st2" width="299" height="299"/>
+</svg>
