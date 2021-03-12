@@ -331,6 +331,10 @@ const DroppableList = ({ id, items, setItems, refreshActions }) => {
                     }
                     onMouseEnter={() => setHoverIndex(index)}
                     onMouseLeave={() => setHoverIndex(null)}
+                    onClick={() => {
+                      setEditIndex(index);
+                      setEditValue(item.body);
+                    }}
                   >
                     {editIndex === index ? (
                       <>
