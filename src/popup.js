@@ -46,7 +46,13 @@ const Popup = () => {
           />
         );
       case "actions":
-        return <Actions />;
+        return (
+          <Actions
+            currentMonday={currentMonday}
+            // to change
+            firstMonday={firstMonday}
+          />
+        );
       default:
         return null;
     }

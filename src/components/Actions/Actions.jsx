@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { withTheme } from "styled-components";
-import ListContainer from "../ListContainer/ListContainer";
 import {
   Nav,
   NavItem,
@@ -12,23 +11,53 @@ import {
 } from "shards-react";
 import { MoreVertical, Trash } from "react-feather";
 
-const Actions = () => {
+import ListContainer from "../ListContainer/ListContainer";
+import { ActionsProvider, ActionsContext } from "context/Actions";
+import {
+  ADD_YELLOW_ITEM,
+  ADD_RED_ITEM,
+  REMOVE_ITEM,
+  SET_YELLOW_ITEMS,
+  SET_RED_ITEMS,
+  INIT,
+} from "context/List";
+
+const Actions = ({ currentMonday, firstMonday }) => {
+  // const [yellowItems, setYellowItems] = useState([
+  //   { id: "1", body: "asdfasdfasd" },
+  //   { id: "2", body: "asdfasdfasd" },
+  // ]);
+  // const [redItems, setRedItems] = useState([
+  //   { id: "1", body: "a;lkajds" },
+  //   { id: "2", body: ";klasdf" },
+  // ]);
+
+  return (
+    <ActionsProvider
+      storageKey="actions"
+      currentMonday={currentMonday}
+      firstMonday={firstMonday}
+    >
+      <ActionElt />
+    </ActionsProvider>
+  );
+};
+
+const ActionElt = () => {
+  const [actions, dispatch] = useContext(ActionsContext);
   const [tab, setTab] = useState("Y");
-  const [yellowItems, setYellowItems] = useState([
-    { id: "1", body: "asdfasdfasd" },
-    { id: "2", body: "asdfasdfasd" },
-  ]);
-  const [redItems, setRedItems] = useState([
-    { id: "1", body: "a;lkajds" },
-    { id: "2", body: ";klasdf" },
-  ]);
+
   return (
     <ListContainer header="Resolve these issues">
       <NavBar tab={tab} setTab={setTab} />
-      <Issues
-        items={tab === "Y" ? yellowItems : redItems}
-        setItems={tab === "Y" ? setYellowItems : setRedItems}
-      />
+      {actions.yellowItems && actions.redItems ? (
+        <Issues
+          items={tab === "Y" ? actions.yellowItems : actions.redItems}
+          setItems={tab === "Y" ? actions.yellowItems : actions.redItems}
+        />
+      ) : (
+        <p>Loading...</p>
+      )}
     </ListContainer>
   );
 };

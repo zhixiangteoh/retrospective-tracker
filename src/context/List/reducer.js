@@ -2,6 +2,9 @@ import {
   ADD_ITEM,
   REMOVE_ITEM,
   UPDATE_ITEM,
+  ADD_GREEN_ITEM,
+  ADD_YELLOW_ITEM,
+  ADD_RED_ITEM,
   SET_GREEN_ITEMS,
   SET_YELLOW_ITEMS,
   SET_RED_ITEMS,
@@ -40,6 +43,48 @@ const reducer = (state, { payload, type }) => {
           return item;
         });
       });
+    case ADD_GREEN_ITEM:
+      return {
+        greenItems: [
+          {
+            id: Math.random()
+              .toString(16)
+              .substr(2),
+            body: payload,
+          },
+          ...state.greenItems,
+        ],
+        yellowItems: state.yellowItems,
+        redItems: state.redItems,
+      };
+    case ADD_YELLOW_ITEM:
+      return {
+        greenItems: state.greenItems,
+        yellowItems: [
+          {
+            id: Math.random()
+              .toString(16)
+              .substr(2),
+            body: payload,
+          },
+          ...state.yellowItems,
+        ],
+        redItems: state.redItems,
+      };
+    case ADD_RED_ITEM:
+      return {
+        greenItems: state.greenItems,
+        yellowItems: state.yellowItems,
+        redItems: [
+          {
+            id: Math.random()
+              .toString(16)
+              .substr(2),
+            body: payload,
+          },
+          ...state.redItems,
+        ],
+      };
     case SET_GREEN_ITEMS:
       return {
         greenItems: payload,
