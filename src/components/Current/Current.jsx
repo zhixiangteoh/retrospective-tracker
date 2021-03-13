@@ -7,6 +7,7 @@ import { ListProvider, ListContext } from "context/List";
 import getMondayDate from "util/getMondayDate";
 import getDayDiff from "util/getDayDiff";
 import getddmm from "util/getddmm";
+import getCopyText from "util/getCopyText";
 import { Copy as CopyIcon, Plus } from "react-feather";
 
 const getNextMonday = (date) => {
@@ -44,33 +45,7 @@ const Copy = ({ disabled, ...props }) => {
   const [list, dispatch] = useContext(ListContext);
   const onClick = () => {
     const textField = document.createElement("textarea");
-    textField.textContent = `\
-Green:
-${
-  list.greenItems.length === 0
-    ? "\tNone"
-    : list.greenItems
-        .map((item) => `\t- ${item.body.split("\n").join("\n\t")}`)
-        .join("\n")
-}
-
-Yellow:
-${
-  list.yellowItems.length === 0
-    ? "\tNone"
-    : list.yellowItems
-        .map((item) => `\t- ${item.body.split("\n").join("\n\t")}`)
-        .join("\n")
-}
-
-Red:
-${
-  list.redItems.length === 0
-    ? "\tNone\n"
-    : list.redItems
-        .map((item) => `\t- ${item.body.split("\n").join("\n\t")}`)
-        .join("\n")
-}`;
+    textField.textContent = getCopyText(list);
     document.body.appendChild(textField);
     textField.select();
     document.execCommand("copy");

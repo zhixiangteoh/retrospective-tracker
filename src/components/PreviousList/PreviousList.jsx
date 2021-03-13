@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Collapse } from "shards-react";
+import { Button, Collapse } from "shards-react";
+import browser from "webextension-polyfill";
+import { Copy as CopyIcon } from "react-feather";
 
 import Previous from "components/Previous";
 import ListContainer from "components/ListContainer";
 import ListHeader from "components/ListHeader";
 import getDayDiff from "util/getDayDiff";
+import getMondayDate from "util/getMondayDate";
+import getCopyText from "util/getCopyText";
+import getddmm from "util/getddmm";
 
 const PreviousList = ({
   setMenu,
@@ -53,8 +58,51 @@ const PreviousList = ({
     });
   };
 
+  const Copy = ({ disabled, ...props }) => {
+    const onClick = async () => {
+      const textField = document.createElement("textarea");
+      let textToCopy = "";
+      for (let i = 0; i < dates.length; i++) {
+        const key = getMondayDate(dates[i]);
+        const storage = await browser.storage.sync.get({
+          [key]: 0,
+        });
+        textToCopy += `**${getddmm(key)} - ${getddmm(
+          key.addDays(5)
+        )}**\n\n${getCopyText(storage[key])}\n\n\n\n`;
+      }
+      textField.textContent = textToCopy.trim();
+      document.body.appendChild(textField);
+      textField.select();
+      document.execCommand("copy");
+      textField.remove();
+    };
+    return (
+      <Button
+        outline
+        pill
+        disabled={disabled}
+        theme={disabled ? "danger" : "primary"}
+        size="sm"
+        onClick={onClick}
+        {...props}
+      >
+        <CopyIcon size={12} /> Copy All
+      </Button>
+    );
+  };
+
   return (
     <ListContainer setMenu={setMenu} header="Review past retrospectives">
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          margin: "-20px 0 10px",
+        }}
+      >
+        <Copy />
+      </div>
       {renderList()}
     </ListContainer>
   );
@@ -62,7 +110,7 @@ const PreviousList = ({
 
 const PreviousElt = ({ header, date, active, setActive, refreshActions }) => {
   return (
-    <div style={{ marginBottom: 4 }}>
+    <div style={{ marginBottom: 10 }}>
       <ListHeader
         header={header}
         mondayDate={date}
@@ -73,11 +121,9 @@ const PreviousElt = ({ header, date, active, setActive, refreshActions }) => {
           setActive(active);
         }}
       />
-      <div style={{ marginTop: 10, marginBottom: 10 }}>
-        <Collapse open={active}>
-          <Previous key={date} date={date} refreshActions={refreshActions} />
-        </Collapse>
-      </div>
+      <Collapse open={active}>
+        <Previous key={date} date={date} refreshActions={refreshActions} />
+      </Collapse>
     </div>
   );
 };

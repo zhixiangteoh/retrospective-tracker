@@ -1,14 +1,51 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import List from "components/List";
-import { ListProvider } from "context/List";
+import { ListProvider, ListContext } from "context/List";
 import getMondayDate from "util/getMondayDate";
+import { Button } from "shards-react";
+import { Copy as CopyIcon } from "react-feather";
+import getCopyText from "util/getCopyText";
+
+const Copy = ({ disabled, ...props }) => {
+  const [list, dispatch] = useContext(ListContext);
+  const onClick = () => {
+    const textField = document.createElement("textarea");
+    textField.textContent = getCopyText(list);
+    document.body.appendChild(textField);
+    textField.select();
+    document.execCommand("copy");
+    textField.remove();
+  };
+  return (
+    <Button
+      outline
+      pill
+      disabled={disabled}
+      theme={disabled ? "danger" : "primary"}
+      size="sm"
+      onClick={onClick}
+      {...props}
+    >
+      <CopyIcon size={12} /> Copy
+    </Button>
+  );
+};
 
 const Previous = ({ date, refreshActions }) => {
   const key = getMondayDate(date);
 
   return (
     <ListProvider storageKey={key}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          margin: "10px 0 5px",
+        }}
+      >
+        <Copy />
+      </div>
       <div className="mb-4">
         <List refreshActions={refreshActions} />
       </div>
