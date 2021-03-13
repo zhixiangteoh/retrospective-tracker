@@ -25,7 +25,7 @@ Date.prototype.addDays = function(days) {
 const firstMonday = getMondayDate(new Date("2/1/2021"));
 
 const Popup = () => {
-  const retroTrackerCurrentMondayKey = "retroTrackerCurrentMonday";
+  const currentMondayKey = "currentMonday";
   const thisMonday = getMondayDate(new Date());
 
   const [page, setPage] = useState("current");
@@ -36,10 +36,10 @@ const Popup = () => {
   // initialize currentMonday value
   useEffect(async () => {
     const storage = await browser.storage.sync.get({
-      [retroTrackerCurrentMondayKey]: thisMonday.toJSON(),
+      [currentMondayKey]: thisMonday.toJSON(),
     });
-    console.log("retrieved: ", new Date(storage[retroTrackerCurrentMondayKey]));
-    setCurrentMonday(new Date(storage[retroTrackerCurrentMondayKey]));
+    console.log("retrieved: ", new Date(storage[currentMondayKey]));
+    setCurrentMonday(new Date(storage[currentMondayKey]));
     currentMonInitRef.current = true;
   }, []);
 
@@ -47,7 +47,7 @@ const Popup = () => {
   useEffect(() => {
     if (currentMonInitRef.current) {
       browser.storage.sync.set({
-        [retroTrackerCurrentMondayKey]: currentMonday.toJSON(),
+        [currentMondayKey]: currentMonday.toJSON(),
       });
     }
   }, [currentMonday]);
