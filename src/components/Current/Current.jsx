@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Button } from "shards-react";
 
 import List from "components/List";
 import ListContainer from "components/ListContainer";
-import { ListProvider } from "context/List";
+import { ListProvider, ListContext } from "context/List";
 import getMondayDate from "util/getMondayDate";
 import getDayDiff from "util/getDayDiff";
-import getddmm from "../../util/getddmm";
+import getddmm from "util/getddmm";
+import { Copy as CopyIcon, Plus } from "react-feather";
 
 const getNextMonday = (date) => {
   const nextMonday = getMondayDate(
@@ -26,11 +27,66 @@ const Save = ({ disabled, ...props }) => {
       outline
       pill
       disabled={disabled}
-      theme={disabled ? "danger" : "primary"}
+      theme="primary"
       size="sm"
       {...props}
     >
+      <Plus
+        size={16}
+        style={{ marginTop: -2, marginLeft: -5, marginRight: 2 }}
+      />
       Start New Week
+    </Button>
+  );
+};
+
+const Copy = ({ disabled, ...props }) => {
+  const [list, dispatch] = useContext(ListContext);
+  const onClick = () => {
+    const textField = document.createElement("textarea");
+    textField.textContent = `\
+Green:
+${
+  list.greenItems.length === 0
+    ? "\tNone"
+    : list.greenItems
+        .map((item) => `\t- ${item.body.split("\n").join("\n\t")}`)
+        .join("\n")
+}
+
+Yellow:
+${
+  list.yellowItems.length === 0
+    ? "\tNone"
+    : list.yellowItems
+        .map((item) => `\t- ${item.body.split("\n").join("\n\t")}`)
+        .join("\n")
+}
+
+Red:
+${
+  list.redItems.length === 0
+    ? "\tNone\n"
+    : list.redItems
+        .map((item) => `\t- ${item.body.split("\n").join("\n\t")}`)
+        .join("\n")
+}`;
+    document.body.appendChild(textField);
+    textField.select();
+    document.execCommand("copy");
+    textField.remove();
+  };
+  return (
+    <Button
+      outline
+      pill
+      disabled={disabled}
+      theme={disabled ? "danger" : "primary"}
+      size="sm"
+      onClick={onClick}
+      {...props}
+    >
+      <CopyIcon size={12} /> Copy
     </Button>
   );
 };
@@ -77,11 +133,14 @@ const Current = ({
           >
             {`${getddmm(key)} - ${getddmm(key.addDays ? key.addDays(5) : key)}`}
           </div>
-          <Save
-            onClick={isSaveable() ? handleSave : () => {}}
-            style={!isSaveable() ? { cursor: "not-allowed" } : null}
-            disabled={!isSaveable()}
-          />
+          <div>
+            <Copy style={{ marginRight: 8 }} />
+            <Save
+              onClick={isSaveable() ? handleSave : () => {}}
+              style={!isSaveable() ? { cursor: "not-allowed" } : null}
+              disabled={!isSaveable()}
+            />
+          </div>
         </div>
         <List refreshActions={refreshActions} />
       </ListContainer>

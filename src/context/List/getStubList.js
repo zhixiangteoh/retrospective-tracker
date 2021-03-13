@@ -2,8 +2,6 @@ const stubList = {
   greenItems: [],
   yellowItems: [],
   redItems: [],
-  moved: {},
-  resolved: {},
 };
 
 const getStubList = () => {
