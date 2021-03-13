@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "shards-react";
 
 import List from "components/List";
@@ -42,6 +42,10 @@ const Current = ({
   refreshActions,
 }) => {
   const [key, setKey] = useState(currentMonday);
+
+  useEffect(() => {
+    setKey(currentMonday);
+  }, [currentMonday]);
 
   const isSaveable = () => {
     return getDayDiff(getCurrentMonday(), getNextMonday(key)) <= 7;

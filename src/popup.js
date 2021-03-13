@@ -1,6 +1,7 @@
 import "libs/polyfills";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
+import browser from "webextension-polyfill";
 import { ThemeProvider } from "styled-components";
 import defaultTheme from "themes/default";
 
@@ -20,14 +21,36 @@ Date.prototype.addDays = function(days) {
   return date;
 };
 
-const thisMonday = getMondayDate(new Date());
 // to change
 const firstMonday = getMondayDate(new Date("2/1/2021"));
 
 const Popup = () => {
+  const retroTrackerCurrentMondayKey = "retroTrackerCurrentMonday";
+  const thisMonday = getMondayDate(new Date());
+
   const [page, setPage] = useState("current");
-  const [currentMonday, setCurrentMonday] = useState(thisMonday);
   const [isRefresh, setIsRefresh] = useState(false);
+  const [currentMonday, setCurrentMonday] = useState(thisMonday);
+  const currentMonInitRef = useRef(false);
+
+  // initialize currentMonday value
+  useEffect(async () => {
+    const storage = await browser.storage.sync.get({
+      [retroTrackerCurrentMondayKey]: thisMonday.toJSON(),
+    });
+    console.log("retrieved: ", new Date(storage[retroTrackerCurrentMondayKey]));
+    setCurrentMonday(new Date(storage[retroTrackerCurrentMondayKey]));
+    currentMonInitRef.current = true;
+  }, []);
+
+  // update browser storage value of currentMonday on change
+  useEffect(() => {
+    if (currentMonInitRef.current) {
+      browser.storage.sync.set({
+        [retroTrackerCurrentMondayKey]: currentMonday.toJSON(),
+      });
+    }
+  }, [currentMonday]);
 
   const renderPage = () => {
     switch (page) {
