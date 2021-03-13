@@ -52,6 +52,14 @@ const Popup = () => {
     }
   }, [currentMonday]);
 
+  const handleReset = () => {
+    // --- start confirmation prompt ---
+
+    // --- end confirmation prompt ---
+    browser.storage.sync.clear();
+    window.close();
+  };
+
   const renderPage = () => {
     switch (page) {
       case "current":
@@ -142,7 +150,7 @@ const Popup = () => {
             cursor: "pointer",
             transition: "0.3s",
           }}
-          onClick={() => {}}
+          onClick={handleReset}
         >
           Reset all settings
         </div>
