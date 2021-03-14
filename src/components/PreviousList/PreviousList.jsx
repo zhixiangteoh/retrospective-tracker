@@ -68,7 +68,7 @@ const PreviousList = ({
           [key]: 0,
         });
         textToCopy += `**${getddmm(key)} - ${getddmm(
-          key.addDays(5)
+          key.addDays(4)
         )}**\n\n${getCopyText(storage[key])}\n\n\n\n`;
       }
       textField.textContent = textToCopy.trim();

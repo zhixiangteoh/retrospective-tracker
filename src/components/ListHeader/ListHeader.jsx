@@ -34,7 +34,7 @@ const ListHeader = ({
           transition: "0.3s",
         }}
       >
-        {`${getddmm(mondayDate)} - ${getddmm(mondayDate.addDays(5))}`}
+        {`${getddmm(mondayDate)} - ${getddmm(mondayDate.addDays(4))}`}
         <ChevronUp
           style={{
             transform: active ? "rotateX(0deg)" : "rotateX(180deg)",

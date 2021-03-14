@@ -2,13 +2,16 @@ import "libs/polyfills";
 import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import browser from "webextension-polyfill";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 import { ThemeProvider } from "styled-components";
 import defaultTheme from "themes/default";
 
 import Current from "components/Current";
 import PreviousList from "components/PreviousList";
 import Actions from "components/Actions";
-import { Nav, NavItem, NavLink } from "shards-react";
+import { Button, Nav, NavItem, NavLink } from "shards-react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 
@@ -22,9 +25,10 @@ Date.prototype.addDays = function(days) {
 };
 
 // to change
-const firstMonday = getMondayDate(new Date("2/1/2021"));
+// const firstMonday = getMondayDate(new Date("2/1/2021"));
 
 const Popup = () => {
+  const [firstMonday, setFirstMonday] = useState("fetching");
   const currentMondayKey = "currentMonday";
   const thisMonday = getMondayDate(new Date());
 
@@ -34,6 +38,17 @@ const Popup = () => {
   const currentMonInitRef = useRef(false);
 
   // initialize currentMonday value
+  useEffect(async () => {
+    const storage = await browser.storage.sync.get({
+      firstMonday: null,
+    });
+    if (storage.firstMonday) {
+      setFirstMonday(new Date(storage.firstMonday));
+    } else {
+      setFirstMonday(null);
+    }
+  }, []);
+
   useEffect(async () => {
     const storage = await browser.storage.sync.get({
       [currentMondayKey]: thisMonday.toJSON(),
@@ -93,6 +108,56 @@ const Popup = () => {
         return null;
     }
   };
+
+  const [selectedDate, setSelectedDate] = useState(null);
+  if (firstMonday === "fetching" || firstMonday === null) {
+    // setTimeout(() => {}, 1000);
+    return (
+      <div
+        style={{
+          boxSizing: "border-box",
+          width: 500,
+          height: 600,
+          padding: 20,
+          paddingBottom: 100,
+          background: "#fafafa",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div>
+          <h3>Hey there!</h3>
+          <p>Pick a starting date to set up your first week.</p>
+          <div>
+            {firstMonday === null && (
+              <DatePicker
+                selected={selectedDate}
+                onChange={setSelectedDate}
+                placeholderText="Choose a date"
+                className="form-control"
+                filterDate={(date) => {
+                  const day = date.getDay();
+                  return day !== 0 && day !== 6;
+                }}
+              />
+            )}
+          </div>
+          <Button
+            style={{ marginTop: 16 }}
+            onClick={() => {
+              browser.storage.sync.set({
+                firstMonday: getMondayDate(selectedDate).toJSON(),
+              });
+              setFirstMonday(getMondayDate(selectedDate));
+            }}
+          >
+            Confirm
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
