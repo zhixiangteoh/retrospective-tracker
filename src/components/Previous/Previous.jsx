@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { toast } from "react-toastify";
 
 import List from "components/List";
 import { ListProvider, ListContext } from "context/List";
@@ -16,6 +17,15 @@ const Copy = ({ disabled, ...props }) => {
     textField.select();
     document.execCommand("copy");
     textField.remove();
+    toast.dark("📋 Copied to clipboard", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+    });
   };
   return (
     <Button

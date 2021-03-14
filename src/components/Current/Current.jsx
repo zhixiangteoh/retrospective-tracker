@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Button } from "shards-react";
+import { toast } from "react-toastify";
 
 import List from "components/List";
 import ListContainer from "components/ListContainer";
@@ -50,6 +51,15 @@ const Copy = ({ disabled, ...props }) => {
     textField.select();
     document.execCommand("copy");
     textField.remove();
+    toast.dark("📋 Copied to clipboard", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+    });
   };
   return (
     <Button

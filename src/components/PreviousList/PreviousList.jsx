@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Collapse } from "shards-react";
 import browser from "webextension-polyfill";
 import { Copy as CopyIcon } from "react-feather";
+import { toast } from "react-toastify";
 
 import Previous from "components/Previous";
 import ListContainer from "components/ListContainer";
@@ -76,6 +77,15 @@ const PreviousList = ({
       textField.select();
       document.execCommand("copy");
       textField.remove();
+      toast.dark("📋 Copied to clipboard", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+      });
     };
     return (
       <Button

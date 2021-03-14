@@ -3,8 +3,9 @@ import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import browser from "webextension-polyfill";
 import DatePicker from "react-datepicker";
-
 import "react-datepicker/dist/react-datepicker.css";
+import { ToastContainer, Flip } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { ThemeProvider } from "styled-components";
 import defaultTheme from "themes/default";
 
@@ -248,6 +249,18 @@ const Popup = () => {
           </Button>
         </ModalFooter>
       </Modal>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        transition={Flip}
+      />
     </ThemeProvider>
   );
 };
