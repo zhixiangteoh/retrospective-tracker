@@ -86,39 +86,7 @@ const Popup = () => {
     window.close();
   };
 
-  const renderPage = () => {
-    switch (page) {
-      case "current":
-        return (
-          <Current
-            currentMonday={currentMonday}
-            setCurrentMonday={setCurrentMonday}
-            refreshActions={() => {}}
-          />
-        );
-      case "previous":
-        return (
-          <PreviousList
-            currentMonday={currentMonday}
-            // to change
-            firstMonday={firstMonday}
-            refreshActions={setIsRefresh}
-          />
-        );
-      case "actions":
-        return (
-          <Actions
-            currentMonday={currentMonday}
-            // to change
-            firstMonday={firstMonday}
-            isRefresh={isRefresh}
-            setIsRefresh={setIsRefresh}
-          />
-        );
-      default:
-        return null;
-    }
-  };
+  const renderPage = () => {};
 
   const [selectedDate, setSelectedDate] = useState(null);
   if (firstMonday === "fetching" || firstMonday === null) {
@@ -172,6 +140,24 @@ const Popup = () => {
     );
   }
 
+  const renderFooter = () => (
+    <div
+      className="text-center highlight-text"
+      style={{
+        color: "#CCC",
+        fontSize: 12,
+        fontWeight: 700,
+        marginTop: 40,
+        marginBottom: 40,
+        cursor: "pointer",
+        transition: "0.3s",
+      }}
+      onClick={() => setIsModalOpen(true)}
+    >
+      Reset all settings
+    </div>
+  );
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -217,23 +203,46 @@ const Popup = () => {
       </Nav>
       <div style={{ height: 60 }} />
       <div style={{ height: 540, overflow: "scroll" }}>
-        {renderPage()}
+        <Fade in={page === "current"}>
+          {page === "current" && (
+            <>
+              <Current
+                currentMonday={currentMonday}
+                setCurrentMonday={setCurrentMonday}
+                refreshActions={() => {}}
+              />
+              {renderFooter()}
+            </>
+          )}
+        </Fade>
+        <Fade in={page === "previous"}>
+          {page === "previous" && (
+            <>
+              <PreviousList
+                currentMonday={currentMonday}
+                // to change
+                firstMonday={firstMonday}
+                refreshActions={setIsRefresh}
+              />
+              {renderFooter()}
+            </>
+          )}
+        </Fade>
 
-        <div
-          className="text-center highlight-text"
-          style={{
-            color: "#CCC",
-            fontSize: 12,
-            fontWeight: 700,
-            marginTop: 40,
-            marginBottom: 40,
-            cursor: "pointer",
-            transition: "0.3s",
-          }}
-          onClick={() => setIsModalOpen(true)}
-        >
-          Reset all settings
-        </div>
+        <Fade in={page === "actions"}>
+          {page === "actions" && (
+            <>
+              <Actions
+                currentMonday={currentMonday}
+                // to change
+                firstMonday={firstMonday}
+                isRefresh={isRefresh}
+                setIsRefresh={setIsRefresh}
+              />
+              {renderFooter()}
+            </>
+          )}
+        </Fade>
       </div>
       <Modal open={isModalOpen} toggle={() => setIsModalOpen(!isModalOpen)}>
         <ModalHeader>Are you sure you want to reset all settings?</ModalHeader>
