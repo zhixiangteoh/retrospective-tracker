@@ -11,7 +11,17 @@ import defaultTheme from "themes/default";
 import Current from "components/Current";
 import PreviousList from "components/PreviousList";
 import Actions from "components/Actions";
-import { Button, Nav, NavItem, NavLink } from "shards-react";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Nav,
+  NavItem,
+  NavLink,
+  Fade,
+} from "shards-react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 
@@ -126,39 +136,42 @@ const Popup = () => {
           alignItems: "center",
         }}
       >
-        <div>
-          <h3>Hey there!</h3>
-          <p>Pick a starting date to set up your first week.</p>
+        <Fade>
           <div>
-            {firstMonday === null && (
-              <DatePicker
-                selected={selectedDate}
-                onChange={setSelectedDate}
-                placeholderText="Choose a date"
-                className="form-control"
-                filterDate={(date) => {
-                  const day = date.getDay();
-                  return day !== 0 && day !== 6;
-                }}
-              />
-            )}
+            <h3>Hey there!</h3>
+            <p>Pick a starting date to set up your first week.</p>
+            <div>
+              {firstMonday === null && (
+                <DatePicker
+                  selected={selectedDate}
+                  onChange={setSelectedDate}
+                  placeholderText="Choose a date"
+                  className="form-control"
+                  filterDate={(date) => {
+                    const day = date.getDay();
+                    return day !== 0 && day !== 6;
+                  }}
+                />
+              )}
+            </div>
+            <Button
+              style={{ marginTop: 16 }}
+              onClick={() => {
+                browser.storage.sync.set({
+                  firstMonday: getMondayDate(selectedDate).toJSON(),
+                });
+                setFirstMonday(getMondayDate(selectedDate));
+              }}
+            >
+              Confirm
+            </Button>
           </div>
-          <Button
-            style={{ marginTop: 16 }}
-            onClick={() => {
-              browser.storage.sync.set({
-                firstMonday: getMondayDate(selectedDate).toJSON(),
-              });
-              setFirstMonday(getMondayDate(selectedDate));
-            }}
-          >
-            Confirm
-          </Button>
-        </div>
+        </Fade>
       </div>
     );
   }
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <ThemeProvider theme={defaultTheme}>
       <Nav
@@ -209,17 +222,32 @@ const Popup = () => {
           className="text-center highlight-text"
           style={{
             color: "#CCC",
-            fontSize: 16,
+            fontSize: 12,
             fontWeight: 700,
+            marginTop: 40,
             marginBottom: 40,
             cursor: "pointer",
             transition: "0.3s",
           }}
-          onClick={handleReset}
+          onClick={() => setIsModalOpen(true)}
         >
           Reset all settings
         </div>
       </div>
+      <Modal open={isModalOpen} toggle={() => setIsModalOpen(!isModalOpen)}>
+        <ModalHeader>Are you sure you want to reset all settings?</ModalHeader>
+        <ModalBody>
+          You will lose all your notes that have been saved on the extension.
+        </ModalBody>
+        <ModalFooter>
+          <Button theme="danger" onClick={handleReset}>
+            Reset
+          </Button>
+          <Button outline onClick={() => setIsModalOpen(false)}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
     </ThemeProvider>
   );
 };
