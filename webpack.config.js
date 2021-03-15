@@ -6,10 +6,7 @@ const ManifestVersionSyncPlugin = require("webpack-manifest-version-sync-plugin"
 
 module.exports = {
   entry: {
-    options: "./src/options.js",
     popup: "./src/popup.js",
-    content: "./src/content.js",
-    background: "./src/background.js",
   },
   output: {
     filename: "[name].js",
