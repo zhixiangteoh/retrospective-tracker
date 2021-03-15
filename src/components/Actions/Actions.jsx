@@ -10,8 +10,9 @@ import {
   DropdownItem,
 } from "shards-react";
 import { MoreVertical, Trash } from "react-feather";
+import { toast } from "react-toastify";
 
-import ListContainer from "../ListContainer/ListContainer";
+import ListContainer from "components/ListContainer";
 import { ListProvider, ListContext } from "context/List";
 import { ActionsProvider, ActionsContext } from "context/Actions";
 import {
@@ -21,7 +22,7 @@ import {
   MOVE_ITEM,
   RESOLVE_ITEM,
 } from "context/List";
-import getUID from "../../util/getUID";
+import getUID from "util/getUID";
 
 const Actions = ({ currentMonday, firstMonday, isRefresh, setIsRefresh }) => {
   return (
@@ -93,8 +94,20 @@ const Issues = withTheme(({ items, theme, CurrentContext, ActionsContext }) => {
   };
 
   const handleMove = (type, item) => {
+    let toastMessage = "Moved to current week's Red 🔴";
+    if (type === "G") toastMessage = "Moved to current week's Green 🟢";
+    else if (type === "Y") toastMessage = "Moved to current week's Yellow 🟡";
     dispatchActions({ type: MOVE_ITEM, payload: item });
     addItem(type, { id: getUID(), body: item.body });
+    toast.dark(toastMessage, {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
   const handleDelete = (item) => {

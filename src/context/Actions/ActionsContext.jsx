@@ -2,8 +2,7 @@ import React, { useReducer, useEffect, useRef } from "react";
 import browser from "webextension-polyfill";
 
 import { INIT, reducer } from "context/List";
-import getMondayDate from "util/getMondayDate";
-import getDayDiff from "util/getDayDiff";
+import { getMondayDate, getDayDiff } from "util/date";
 
 // global list object
 const ActionsContext = React.createContext({});

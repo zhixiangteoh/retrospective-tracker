@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "shards-react";
 import { ChevronDown, ChevronUp } from "react-feather";
 
-import getddmm from "util/getddmm";
+import { getddmm } from "util/date";
 
 const ListHeader = ({
   header,
@@ -34,7 +34,7 @@ const ListHeader = ({
           transition: "0.3s",
         }}
       >
-        {`${getddmm(mondayDate)} - ${getddmm(mondayDate.addDays(5))}`}
+        {`${getddmm(mondayDate)} - ${getddmm(mondayDate.addDays(4))}`}
         <ChevronUp
           style={{
             transform: active ? "rotateX(0deg)" : "rotateX(180deg)",
