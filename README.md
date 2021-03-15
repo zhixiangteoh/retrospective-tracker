@@ -69,9 +69,9 @@ Enable extension within browser:
 
 ## Made possible with
 
-<div style="display: inline-block; justify-content: space-between; align-items: center">
-    <img style="width: 100px" src="rweb.png" alt="React Web Extension Boilerplate" />
-    <img style="width: 100px" src="shards.jpg" alt="Shards React" />
-    <img style="width: 100px" src="toastify.png" alt="React-Toastify" />
-    <img style="width: 100px" src="datepicker.jpg" alt="React Datepicker" />
+<div align="center">
+    <img width="100" src="rweb.png" alt="React Web Extension Boilerplate" />
+    <img width="100" src="shards.jpg" alt="Shards React" />
+    <img width="100" src="toastify.png" alt="React-Toastify" />
+    <img width="100" src="datepicker.jpg" alt="React Datepicker" />
 </div>
