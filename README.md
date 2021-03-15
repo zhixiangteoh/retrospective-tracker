@@ -3,7 +3,7 @@
 > Browser extension designed to conveniently create and track weekly retrospectives for the MLH Fellowship.
 
 <div align="center">
-<img src="src/assets/img/icon-128x128.png" />
+    <img src="src/assets/img/icon-128x128.png" />
 </div>
 
 ## Description
@@ -69,9 +69,9 @@ Enable extension within browser:
 
 ## Made possible with
 
-<div style="display: flex; justify-content: space-between; align-items: center">
-    <img style="width: 200px" src="rweb.png" alt="React Web Extension Boilerplate" />
-    <img style="width: 150px" src="shards.jpg" alt="Shards React" />
-    <img style="width: 200px" src="toastify.png" alt="React-Toastify" />
-    <img style="width: 200px" src="datepicker.jpg" alt="React Datepicker" />
+<div style="display: inline-block; justify-content: space-between; align-items: center">
+    <img style="width: 100px" src="rweb.png" alt="React Web Extension Boilerplate" />
+    <img style="width: 100px" src="shards.jpg" alt="Shards React" />
+    <img style="width: 100px" src="toastify.png" alt="React-Toastify" />
+    <img style="width: 100px" src="datepicker.jpg" alt="React Datepicker" />
 </div>
