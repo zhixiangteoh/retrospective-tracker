@@ -69,7 +69,7 @@ Enable extension within browser:
 
 ## Made possible with
 
-<div align="center">
+<div>
     <img width="100" src="rweb.png" alt="React Web Extension Boilerplate" />
     <img width="100" src="shards.jpg" alt="Shards React" />
     <img width="100" src="toastify.png" alt="React-Toastify" />
