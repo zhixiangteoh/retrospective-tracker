@@ -8,7 +8,7 @@
 
 ## Description
 
-Weekly retrospectives are some of the most important reflective activities in the MLH Fellowship. However, the current process of only thinking up retrospective green, yellow, red notes during Friday's standup meetings, in the short time frame of 5-7 minutes is limiting in terms of the deep reflection and retrospection that one is supposed to undergo. Retrospective-Tracker aims to partially solve this issue by incorporating a convenient manner to jot down retrospective one-liners throughout the week, so that fellows can use the time on Fridays to reflect more deeply about these one-liners, to achieve a deeper level of retrospection.
+Weekly retrospectives are some of the most important reflective activities in the MLH Fellowship. However, the current process of only thinking up retrospective green, yellow, red notes during Friday's standup meetings, in the short time frame of 5-7 minutes is limiting in terms of the deep reflection and retrospection that one is supposed to undergo. Retrospective-Tracker aims to partially solve this issue by incorporating a convenient manner to jot down retrospective one-liners throughout the week, so that fellows can use the time on Fridays to reflect more deeply about these one-liners, to achieve a deeper level of retrospection. Click <a id="raw-url" href="https://raw.githubusercontent.com/zhixiangteoh/retrospective-tracker/main/retrospective-tracker%40v0.1.crx">here</a> to get the chrome extension. (Works only when dragged into `chrome://extensions/` with the Developer Mode already turned on. Refresh the page if you just toggled it!)
 
 ## Features
 
