@@ -5,19 +5,9 @@ import { toast } from "react-toastify";
 import List from "components/List";
 import ListContainer from "components/ListContainer";
 import { ListProvider, ListContext } from "context/List";
-import getMondayDate from "util/getMondayDate";
-import getDayDiff from "util/getDayDiff";
-import getddmm from "util/getddmm";
+import { getMondayDate, getNextMonday, getDayDiff, getddmm } from "util/date";
 import getCopyText from "util/getCopyText";
 import { Copy as CopyIcon, Plus } from "react-feather";
-
-const getNextMonday = (date) => {
-  const nextMonday = getMondayDate(
-    new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000)
-  ); // Monday of next week
-
-  return nextMonday;
-};
 
 const getCurrentMonday = () => {
   return getMondayDate(new Date()); // Monday of this week
@@ -51,7 +41,7 @@ const Copy = ({ disabled, ...props }) => {
     textField.select();
     document.execCommand("copy");
     textField.remove();
-    toast.dark("📋 Copied to clipboard", {
+    toast.dark("Copied to clipboard 📋", {
       position: "top-center",
       autoClose: 3000,
       hideProgressBar: true,

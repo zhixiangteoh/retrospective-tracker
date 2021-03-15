@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 import List from "components/List";
 import { ListProvider, ListContext } from "context/List";
-import getMondayDate from "util/getMondayDate";
+import { getMondayDate } from "util/date";
 import { Button } from "shards-react";
 import { Copy as CopyIcon } from "react-feather";
 import getCopyText from "util/getCopyText";
@@ -17,7 +17,7 @@ const Copy = ({ disabled, ...props }) => {
     textField.select();
     document.execCommand("copy");
     textField.remove();
-    toast.dark("📋 Copied to clipboard", {
+    toast.dark("Copied to clipboard 📋", {
       position: "top-center",
       autoClose: 3000,
       hideProgressBar: true,

@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "shards-react";
 import { ChevronDown, ChevronUp } from "react-feather";
 
-import getddmm from "util/getddmm";
+import { getddmm } from "util/date";
 
 const ListHeader = ({
   header,

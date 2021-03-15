@@ -7,10 +7,8 @@ import { toast } from "react-toastify";
 import Previous from "components/Previous";
 import ListContainer from "components/ListContainer";
 import ListHeader from "components/ListHeader";
-import getDayDiff from "util/getDayDiff";
-import getMondayDate from "util/getMondayDate";
+import { getDayDiff, getMondayDate, getddmm } from "util/date";
 import getCopyText from "util/getCopyText";
-import getddmm from "util/getddmm";
 
 const PreviousList = ({
   setMenu,
@@ -77,7 +75,7 @@ const PreviousList = ({
       textField.select();
       document.execCommand("copy");
       textField.remove();
-      toast.dark("📋 Copied to clipboard", {
+      toast.dark("Copied all to clipboard 📋", {
         position: "top-center",
         autoClose: 3000,
         hideProgressBar: true,

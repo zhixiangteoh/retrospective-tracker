@@ -12,7 +12,7 @@ import {
 import { MoreVertical, Trash } from "react-feather";
 import { toast } from "react-toastify";
 
-import ListContainer from "../ListContainer/ListContainer";
+import ListContainer from "components/ListContainer";
 import { ListProvider, ListContext } from "context/List";
 import { ActionsProvider, ActionsContext } from "context/Actions";
 import {
@@ -22,7 +22,7 @@ import {
   MOVE_ITEM,
   RESOLVE_ITEM,
 } from "context/List";
-import getUID from "../../util/getUID";
+import getUID from "util/getUID";
 
 const Actions = ({ currentMonday, firstMonday, isRefresh, setIsRefresh }) => {
   return (

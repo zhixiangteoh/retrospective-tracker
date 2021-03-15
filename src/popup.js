@@ -8,10 +8,6 @@ import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ThemeProvider } from "styled-components";
 import defaultTheme from "themes/default";
-
-import Current from "components/Current";
-import PreviousList from "components/PreviousList";
-import Actions from "components/Actions";
 import {
   Button,
   Modal,
@@ -26,8 +22,11 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 
+import Current from "components/Current";
+import PreviousList from "components/PreviousList";
+import Actions from "components/Actions";
+import { getMondayDate, getNextMonday, getSignedDayDiff } from "util/date";
 import "./popup.css";
-import getMondayDate from "util/getMondayDate";
 
 Date.prototype.addDays = function(days) {
   var date = new Date(this.valueOf());
@@ -40,7 +39,6 @@ Date.prototype.addDays = function(days) {
 
 const Popup = () => {
   const [firstMonday, setFirstMonday] = useState("fetching");
-  const currentMondayKey = "currentMonday";
   const thisMonday = getMondayDate(new Date());
 
   const [page, setPage] = useState("current");
@@ -48,7 +46,7 @@ const Popup = () => {
   const [currentMonday, setCurrentMonday] = useState(thisMonday);
   const currentMonInitRef = useRef(false);
 
-  // initialize currentMonday value
+  // initialize firstMonday value
   useEffect(async () => {
     const storage = await browser.storage.sync.get({
       firstMonday: null,
@@ -60,12 +58,18 @@ const Popup = () => {
     }
   }, []);
 
+  // initialize currentMonday value
   useEffect(async () => {
     const storage = await browser.storage.sync.get({
-      [currentMondayKey]: thisMonday.toJSON(),
+      currentMonday: thisMonday.toJSON(),
     });
-    console.log("retrieved: ", new Date(storage[currentMondayKey]));
-    setCurrentMonday(new Date(storage[currentMondayKey]));
+    const storedDate = new Date(storage.currentMonday);
+    // if stored currentMonday is lagging, update to thisMonday
+    if (getNextMonday(storedDate).toJSON() === thisMonday.toJSON()) {
+      setCurrentMonday(thisMonday);
+    } else {
+      setCurrentMonday(storedDate);
+    }
     currentMonInitRef.current = true;
   }, []);
 
@@ -73,15 +77,12 @@ const Popup = () => {
   useEffect(() => {
     if (currentMonInitRef.current) {
       browser.storage.sync.set({
-        [currentMondayKey]: currentMonday.toJSON(),
+        currentMonday: currentMonday.toJSON(),
       });
     }
   }, [currentMonday]);
 
   const handleReset = () => {
-    // --- start confirmation prompt ---
-
-    // --- end confirmation prompt ---
     browser.storage.sync.clear();
     window.close();
   };
@@ -157,7 +158,12 @@ const Popup = () => {
             </div>
             <Button
               style={{ marginTop: 16 }}
+              disabled={getSignedDayDiff(currentMonday, selectedDate) < 0}
               onClick={() => {
+                // if selected date in future
+                if (getSignedDayDiff(currentMonday, selectedDate) < 0) {
+                  return;
+                }
                 browser.storage.sync.set({
                   firstMonday: getMondayDate(selectedDate).toJSON(),
                 });
